@@ -1,0 +1,159 @@
+"use client";
+
+import { MessageCircle, Clock, Shield, Zap, Mail, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const WA_NUMBER = "919198747810";
+const WA_MESSAGE = encodeURIComponent(
+  "Hi! I need help with Interior Designer AI."
+);
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
+
+const faqs = [
+  {
+    q: "How many renders do I get on the free trial?",
+    a: "The 3-day free trial includes 3 AI renders. After that, your plan activates automatically.",
+  },
+  {
+    q: "Will I be charged during the trial?",
+    a: "No. Your card is stored securely but only charged when you exceed the trial renders or the 3-day period ends.",
+  },
+  {
+    q: "How do I cancel my subscription?",
+    a: "Go to Settings → Subscription and click 'Cancel subscription'. You keep access until the end of your billing period.",
+  },
+  {
+    q: "What file formats can I upload?",
+    a: "JPEG and PNG are supported. For best results, use a well-lit photo at least 1024 px on the shorter side.",
+  },
+  {
+    q: "How long does generation take?",
+    a: "Most renders complete in 20–40 seconds depending on queue load.",
+  },
+  {
+    q: "Is my photo stored or used for training?",
+    a: "No. Photos are processed ephemerally and immediately discarded after generation.",
+  },
+];
+
+const supportHighlights = [
+  { icon: Clock,        label: "Response in minutes",    sub: "Average reply time under 5 min" },
+  { icon: Shield,       label: "Secure & confidential",  sub: "Your data is never shared" },
+  { icon: Zap,          label: "Expert support",         sub: "Handled by the product team" },
+];
+
+export default function HelpPage() {
+  return (
+    <div className="mx-auto max-w-3xl space-y-10 py-4">
+
+      {/* Header */}
+      <div className="space-y-1.5">
+        <h1 className="text-2xl font-semibold tracking-tight">Help & Support</h1>
+        <p className="text-sm text-muted-foreground">
+          Find answers to common questions or reach our team directly on WhatsApp.
+        </p>
+      </div>
+
+      {/* WhatsApp CTA card */}
+      <Card className="overflow-hidden border-green-200 dark:border-green-800 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/20">
+        <CardContent className="p-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-6 sm:p-8">
+            {/* Icon */}
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#25D366] shadow-lg shadow-green-500/30">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="white">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+
+            {/* Text */}
+            <div className="flex-1 space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-green-700 dark:text-green-400">Live Support</p>
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Chat with us on WhatsApp</h2>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Get instant help from our team. Available 7 days a week for billing, technical issues, and feature questions.
+              </p>
+            </div>
+
+            {/* CTA */}
+            <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="shrink-0 w-full sm:w-auto">
+              <Button className="w-full sm:w-auto gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-md shadow-green-500/20 px-6">
+                <MessageCircle className="h-4 w-4" />
+                Start Chat
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </a>
+          </div>
+
+          {/* Highlights strip */}
+          <div className="grid grid-cols-3 divide-x divide-green-200 dark:divide-green-800 border-t border-green-200 dark:border-green-800">
+            {supportHighlights.map(({ icon: Icon, label, sub }) => (
+              <div key={label} className="flex flex-col items-center gap-0.5 px-4 py-3 text-center">
+                <Icon className="h-4 w-4 text-green-600 dark:text-green-400 mb-0.5" />
+                <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{label}</span>
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 hidden sm:block">{sub}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Email fallback */}
+      <div className="flex items-center gap-3 rounded-xl border bg-background px-5 py-4">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-muted">
+          <Mail className="h-4 w-4 text-muted-foreground" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium">Prefer email?</p>
+          <p className="text-xs text-muted-foreground truncate">Reach us at <span className="text-foreground font-medium">design@avada.space</span></p>
+        </div>
+        <a href="mailto:design@avada.space" className="shrink-0">
+          <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+            Send email
+            <ChevronRight className="h-3 w-3" />
+          </Button>
+        </a>
+      </div>
+
+      {/* FAQ */}
+      <div className="space-y-4">
+        <div className="space-y-0.5">
+          <h2 className="text-lg font-semibold tracking-tight">Frequently Asked Questions</h2>
+          <p className="text-sm text-muted-foreground">Quick answers to the most common questions.</p>
+        </div>
+
+        <div className="divide-y rounded-xl border bg-background overflow-hidden">
+          {faqs.map(({ q, a }) => (
+            <div key={q} className="flex gap-3 px-5 py-4">
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-green-500" />
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium">{q}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Still stuck */}
+      <div className="flex flex-col items-center gap-3 rounded-xl border bg-background px-6 py-8 text-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-950">
+          <MessageCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+        </div>
+        <div>
+          <p className="font-medium">Still have a question?</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Our team is ready to help you right away.</p>
+        </div>
+        <a href={WA_LINK} target="_blank" rel="noopener noreferrer">
+          <Button className="gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-6">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Open WhatsApp
+          </Button>
+        </a>
+      </div>
+
+    </div>
+  );
+}
