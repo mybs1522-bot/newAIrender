@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "@/components/session-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { SwRegister } from "@/components/sw-register";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,13 +30,13 @@ export const metadata: Metadata = {
     title: "Interior Designer AI",
     description:
       "Transform your space with AI-powered interior design in seconds.",
-    url: "https://interior-designer-ai.vercel.app/",
+    url: "https://www.avada.space/",
     siteName: "Interior Designer AI",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://interior-designer-ai.vercel.app/app-screenshot.png",
+        url: "https://www.avada.space/app-screenshot.png",
         width: 1200,
         height: 630,
         alt: "Interior Designer AI - Transform your space instantly",
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Interior Designer AI",
     description: "Transform your space with AI-powered interior design",
-    images: ["https://interior-designer-ai.vercel.app/app-screenshot.png"],
+    images: ["https://www.avada.space/app-screenshot.png"],
   },
   manifest: "/manifest.json",
   icons: {
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <Toaster />
           </ThemeProvider>
         </SessionProvider>
+        <SwRegister />
         <Analytics />
       </body>
     </html>
