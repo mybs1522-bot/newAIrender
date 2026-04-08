@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ImageDropzone } from "@/components/image-dropzone";
@@ -30,7 +30,17 @@ async function triggerDownload(url: string) {
   }
 }
 
-export default function RenderPage() {
+function SubscribedToast() {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    if (searchParams.get("subscribed") === "1") {
+      toast.success("Welcome! Your 3-day free trial has started. You have 3 renders included.");
+    }
+  }, [searchParams]);
+  return null;
+}
+
+function RenderPageInner() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [outputImage, setOutputImage] = useState<string | null>(null);
   const [questionnaire, setQuestionnaire] = useState<DesignQuestionnaire>(DEFAULT_QUESTIONNAIRE);
@@ -41,13 +51,6 @@ export default function RenderPage() {
 
   const { history, addEntry, removeEntry, clearAll } = useRenderHistory();
   const { subscribed, status: subStatus, loading: subLoading, generationCount, generationLimit, hadTrial, refresh: refreshSubscription } = useSubscription();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.get("subscribed") === "1") {
-      toast.success("Welcome! Your 3-day free trial has started. You have 3 renders included.");
-    }
-  }, [searchParams]);
 
   const handleImageUpload = useCallback((base64: string) => {
     setUploadedImage(base64);
@@ -195,5 +198,14 @@ export default function RenderPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function RenderPage() {
+  return (
+    <Suspense>
+      <SubscribedToast />
+      <RenderPageInner />
+    </Suspense>
   );
 }
