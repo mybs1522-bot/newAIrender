@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createOTP } from "@/lib/otp";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const { email } = await req.json();
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
@@ -36,7 +35,10 @@ export async function POST(req: NextRequest) {
   if (error) {
     console.error("Resend error:", JSON.stringify(error));
     return NextResponse.json(
-      { error: "Failed to send email", detail: (error as { message?: string }).message ?? String(error) },
+      {
+        error: "Failed to send email",
+        detail: (error as { message?: string }).message ?? String(error),
+      },
       { status: 500 }
     );
   }
