@@ -1,14 +1,9 @@
 import { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { verifyOTP } from "@/lib/otp";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       id: "otp",
       name: "OTP",
@@ -18,8 +13,13 @@ export const authOptions: NextAuthOptions = {
         token: { label: "Token", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.code || !credentials?.token) return null;
-        const valid = verifyOTP(credentials.email, credentials.code, credentials.token);
+        if (!credentials?.email || !credentials?.code || !credentials?.token)
+          return null;
+        const valid = verifyOTP(
+          credentials.email,
+          credentials.code,
+          credentials.token
+        );
         if (!valid) return null;
         return {
           id: credentials.email.toLowerCase().trim(),
