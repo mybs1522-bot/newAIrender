@@ -26,14 +26,14 @@ export const PLANS = {
     price: "$20",
     period: "/month",
     priceId: process.env.STRIPE_PRICE_MONTHLY_ID!,
-    trialDays: 3,
+    trialDays: 7,
   },
   yearly: {
     label: "Yearly",
     price: "$200",
     period: "/year",
     priceId: process.env.STRIPE_PRICE_YEARLY_ID!,
-    trialDays: 3,
+    trialDays: 7,
   },
 } as const;
 

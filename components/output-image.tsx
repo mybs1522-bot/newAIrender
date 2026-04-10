@@ -20,7 +20,10 @@ function RenderLoader() {
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setStage((s) => (s + 1) % STAGES.length), 2200);
+    const id = setInterval(
+      () => setStage((s) => (s + 1) % STAGES.length),
+      2200
+    );
     return () => clearInterval(id);
   }, []);
 
@@ -50,13 +53,13 @@ function RenderLoader() {
         {/* Rotating rings + pulsing orb */}
         <div className="relative flex items-center justify-center">
           {/* Outer ring */}
-          <div className="absolute h-24 w-24 rounded-full border-2 border-violet-400/20 animate-[spin_4s_linear_infinite]" />
+          <div className="absolute h-24 w-24 animate-[spin_4s_linear_infinite] rounded-full border-2 border-violet-400/20" />
           {/* Mid ring */}
-          <div className="absolute h-16 w-16 rounded-full border-2 border-indigo-400/30 border-t-indigo-400/80 animate-[spin_2s_linear_infinite]" />
+          <div className="absolute h-16 w-16 animate-[spin_2s_linear_infinite] rounded-full border-2 border-indigo-400/30 border-t-indigo-400/80" />
           {/* Inner ring */}
-          <div className="absolute h-10 w-10 rounded-full border-2 border-pink-400/30 border-b-pink-400/80 animate-[spin_1.2s_linear_infinite_reverse]" />
+          <div className="absolute h-10 w-10 animate-[spin_1.2s_linear_infinite_reverse] rounded-full border-2 border-pink-400/30 border-b-pink-400/80" />
           {/* Core orb */}
-          <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 shadow-[0_0_20px_rgba(139,92,246,0.6)] animate-pulse">
+          <div className="relative flex h-7 w-7 animate-pulse items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 shadow-[0_0_20px_rgba(139,92,246,0.6)]">
             <Sparkles className="h-3.5 w-3.5 text-white" />
           </div>
         </div>
@@ -65,22 +68,23 @@ function RenderLoader() {
         <div className="flex flex-col items-center gap-1.5">
           <p
             key={stage}
-            className="text-sm font-medium text-foreground/80 animate-[fadeIn_0.4s_ease]"
+            className="text-foreground/80 animate-[fadeIn_0.4s_ease] text-sm font-medium"
             style={{ animation: "fadeIn 0.4s ease" }}
           >
             {STAGES[stage]}
           </p>
           {/* Dot progress */}
-          <div className="flex items-center gap-1.5 mt-1">
+          <div className="mt-1 flex items-center gap-1.5">
             {STAGES.map((_, i) => (
               <div
                 key={i}
                 className="h-1 rounded-full transition-all duration-500"
                 style={{
                   width: i === stage ? "20px" : "6px",
-                  background: i === stage
-                    ? "linear-gradient(90deg, #8b5cf6, #6366f1)"
-                    : "rgba(255,255,255,0.2)",
+                  background:
+                    i === stage
+                      ? "linear-gradient(90deg, #8b5cf6, #6366f1)"
+                      : "rgba(255,255,255,0.2)",
                 }}
               />
             ))}
@@ -89,7 +93,7 @@ function RenderLoader() {
       </div>
 
       {/* Corner shimmer blocks (skeleton lines) */}
-      <div className="absolute bottom-4 left-4 right-4 space-y-2 opacity-30">
+      <div className="absolute right-4 bottom-4 left-4 space-y-2 opacity-30">
         <div className="h-1.5 w-3/4 rounded-full bg-white/20" />
         <div className="h-1.5 w-1/2 rounded-full bg-white/15" />
       </div>
@@ -107,11 +111,16 @@ function RenderLoader() {
 interface OutputImageProps {
   src: string | null;
   isLoading: boolean;
+  subscribed?: boolean;
 }
 
-export function OutputImage({ src, isLoading }: OutputImageProps) {
+export function OutputImage({
+  src,
+  isLoading,
+  subscribed = false,
+}: OutputImageProps) {
   const handleDownload = () => {
-    if (src) {
+    if (src && subscribed) {
       saveAs(src, "interior-design.png");
     }
   };
@@ -152,7 +161,9 @@ export function OutputImage({ src, isLoading }: OutputImageProps) {
         <Button
           variant="secondary"
           size="icon"
-          className="absolute top-2 right-2 border border-white/15 bg-white/20 backdrop-blur-xl hover:bg-white/30"
+          title={subscribed ? "Download" : "Start a plan to download"}
+          disabled={!subscribed}
+          className="absolute top-2 right-2 border border-white/15 bg-white/20 backdrop-blur-xl hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
           onClick={handleDownload}
         >
           <Download className="h-4 w-4" />

@@ -6,11 +6,14 @@ import { toast } from "sonner";
 import { ImageDropzone } from "@/components/image-dropzone";
 import { UploadedImage } from "@/components/uploaded-image";
 import { OutputImage } from "@/components/output-image";
-import { DesignQuestionnaireForm, DEFAULT_QUESTIONNAIRE } from "@/components/design-questionnaire";
+import {
+  DesignQuestionnaireForm,
+  DEFAULT_QUESTIONNAIRE,
+} from "@/components/design-questionnaire";
 import { RenderGallery } from "@/components/render-gallery";
 import { useRenderHistory } from "@/hooks/useRenderHistory";
 import { useSubscription } from "@/hooks/use-subscription";
-import { PricingModal } from "@/components/pricing-modal";
+import { PlanNotActiveModal } from "@/components/plan-not-active-modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
@@ -34,7 +37,9 @@ function SubscribedToast() {
   const searchParams = useSearchParams();
   useEffect(() => {
     if (searchParams.get("subscribed") === "1") {
-      toast.success("Welcome! Your 3-day free trial has started. You have 3 renders included.");
+      toast.success(
+        "Welcome! Your 3-day free trial has started. You have 3 renders included."
+      );
     }
   }, [searchParams]);
   return null;
@@ -43,14 +48,22 @@ function SubscribedToast() {
 function RenderPageInner() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [outputImage, setOutputImage] = useState<string | null>(null);
-  const [questionnaire, setQuestionnaire] = useState<DesignQuestionnaire>(DEFAULT_QUESTIONNAIRE);
+  const [questionnaire, setQuestionnaire] = useState<DesignQuestionnaire>(
+    DEFAULT_QUESTIONNAIRE
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pricingOpen, setPricingOpen] = useState(false);
   const upgradingRef = useRef(false);
 
   const { history, addEntry, removeEntry, clearAll } = useRenderHistory();
-  const { subscribed, status: subStatus, loading: subLoading, generationCount, generationLimit, hadTrial, refresh: refreshSubscription } = useSubscription();
+  const {
+    subscribed,
+    status: subStatus,
+    loading: subLoading,
+    hadTrial,
+    refresh: refreshSubscription,
+  } = useSubscription();
 
   const handleImageUpload = useCallback((base64: string) => {
     setUploadedImage(base64);
@@ -75,19 +88,6 @@ function RenderPageInner() {
       setPricingOpen(true);
       return;
     }
-    if (!subLoading && subStatus === "trialing" && generationCount >= generationLimit && !upgradingRef.current) {
-      upgradingRef.current = true;
-      try {
-        const upRes = await fetch("/api/stripe/upgrade", { method: "POST" });
-        if (!upRes.ok) {
-          const upData = await upRes.json();
-          toast.error(upData.error ?? "Could not activate paid plan");
-          return;
-        }
-      } finally {
-        upgradingRef.current = false;
-      }
-    }
     setIsLoading(true);
     setError(null);
     setOutputImage(null);
@@ -99,14 +99,16 @@ function RenderPageInner() {
       });
       const data = await response.json();
       if (!response.ok) {
-        if (data.code === "subscription_required") { await refreshSubscription(); setPricingOpen(true); return; }
-        if (data.code === "trial_limit_reached") {
-          toast.error("Trial limit reached. Please try again.");
+        if (data.code === "subscription_required") {
+          await refreshSubscription();
+          setPricingOpen(true);
           return;
         }
         throw new Error(data.error || "Generation failed");
       }
-      const url: string = Array.isArray(data.output) ? data.output[data.output.length - 1] : data.output;
+      const url: string = Array.isArray(data.output)
+        ? data.output[data.output.length - 1]
+        : data.output;
       if (!url) throw new Error("No output image returned");
 
       setOutputImage(url);
@@ -128,14 +130,32 @@ function RenderPageInner() {
     } finally {
       setIsLoading(false);
     }
-  }, [uploadedImage, questionnaire, addEntry, subLoading, subscribed, subStatus, generationCount, generationLimit, refreshSubscription]);
+  }, [
+    uploadedImage,
+    questionnaire,
+    addEntry,
+    subLoading,
+    subscribed,
+    refreshSubscription,
+  ]);
 
   return (
     <div className="space-y-6">
-      <PricingModal open={pricingOpen} onClose={() => setPricingOpen(false)} hadTrial={hadTrial} />
+      <PlanNotActiveModal
+        open={pricingOpen}
+        onClose={() => setPricingOpen(false)}
+        hadTrial={hadTrial}
+        onActivated={() => {
+          setPricingOpen(false);
+          refreshSubscription().then(() => handleGenerate());
+        }}
+      />
 
       {error && (
-        <Alert variant="destructive" className="glass-panel border-red-300/25 bg-red-500/10 text-foreground shadow-[0_20px_50px_rgba(127,29,29,0.18)]">
+        <Alert
+          variant="destructive"
+          className="glass-panel text-foreground border-red-300/25 bg-red-500/10 shadow-[0_20px_50px_rgba(127,29,29,0.18)]"
+        >
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
@@ -144,15 +164,16 @@ function RenderPageInner() {
 
       <Card className="glass-panel-strong overflow-hidden rounded-[2rem] border-white/15">
         <CardHeader className="items-center pb-3 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border bg-muted/50 px-3 py-1 text-xs text-muted-foreground">
+          <div className="bg-muted/50 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
             <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
             AI Interior Studio
           </div>
           <CardTitle className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Design your room — every detail, exactly as you want it
           </CardTitle>
-          <p className="max-w-xl text-sm leading-6 text-muted-foreground">
-            Answer 6 quick steps to build a precise prompt. Your layout and structure will be preserved exactly.
+          <p className="text-muted-foreground max-w-xl text-sm leading-6">
+            Answer 6 quick steps to build a precise prompt. Your layout and
+            structure will be preserved exactly.
           </p>
         </CardHeader>
         <CardContent>
@@ -162,14 +183,16 @@ function RenderPageInner() {
             onGenerate={handleGenerate}
             isLoading={isLoading}
             canGenerate={!!uploadedImage}
-            trialExhausted={subStatus === "trialing" && generationCount >= generationLimit}
+            trialExhausted={false}
           />
         </CardContent>
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="flex min-h-[420px] flex-col gap-3 rounded-[1.75rem] glass-panel p-4 sm:p-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Original Photo</h2>
+        <div className="glass-panel flex min-h-[420px] flex-col gap-3 rounded-[1.75rem] p-4 sm:p-5">
+          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+            Original Photo
+          </h2>
           {uploadedImage ? (
             <UploadedImage src={uploadedImage} onRemove={handleRemoveImage} />
           ) : (
@@ -180,10 +203,16 @@ function RenderPageInner() {
           )}
         </div>
 
-        <div className="flex min-h-[420px] flex-col gap-3 rounded-[1.75rem] glass-panel p-4 sm:p-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">AI Design</h2>
+        <div className="glass-panel flex min-h-[420px] flex-col gap-3 rounded-[1.75rem] p-4 sm:p-5">
+          <h2 className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+            AI Design
+          </h2>
           <div className="flex-1">
-            <OutputImage src={outputImage} isLoading={isLoading} />
+            <OutputImage
+              src={outputImage}
+              isLoading={isLoading}
+              subscribed={subscribed || subStatus === "trialing"}
+            />
           </div>
         </div>
       </div>
