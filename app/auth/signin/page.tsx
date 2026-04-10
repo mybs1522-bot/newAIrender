@@ -26,7 +26,11 @@ function OTPForm() {
       body: JSON.stringify({ email }),
     });
     setLoading(false);
-    if (!res.ok) { setError("Could not send code. Try again."); return; }
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      setError(body.detail ?? "Could not send code. Try again.");
+      return;
+    }
     setStep("otp");
   };
 
