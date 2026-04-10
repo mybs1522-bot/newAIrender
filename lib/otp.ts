@@ -1,64 +1,41 @@
-import { promises as fs } from "fs";
-import path from "path";
 import crypto from "crypto";
 
-const DATA_FILE = path.join(process.cwd(), "data", "otp.json");
 const OTP_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
-interface OTPEntry {
-  email: string;
-  code: string;
-  createdAt: number;
-  expiresAt: number;
-  attempts: number;
+function hmac(data: string): string {
+  return crypto
+    .createHmac("sha256", process.env.NEXTAUTH_SECRET!)
+    .update(data)
+    .digest("hex");
 }
 
-async function readData(): Promise<Record<string, OTPEntry>> {
+interface OTPPayload {
+  e: string;   // normalised email
+  ts: number;  // issued timestamp
+  sig: string; // hmac(email|code|ts) — code is NOT stored in token
+}
+
+/** Generate a 6-digit code + a signed token to return to the client. */
+export function createOTP(email: string): { code: string; token: string } {
+  const e = email.toLowerCase().trim();
+  const code = String(crypto.randomInt(100000, 1000000));
+  const ts = Date.now();
+  const sig = hmac(`${e}|${code}|${ts}`);
+  const token = Buffer.from(JSON.stringify({ e, ts, sig } satisfies OTPPayload)).toString("base64url");
+  return { code, token };
+}
+
+/** Verify user-supplied code against the signed token — fully stateless. */
+export function verifyOTP(email: string, code: string, token: string): boolean {
   try {
-    return JSON.parse(await fs.readFile(DATA_FILE, "utf-8"));
+    const payload = JSON.parse(Buffer.from(token, "base64url").toString()) as OTPPayload;
+    const e = email.toLowerCase().trim();
+    if (payload.e !== e) return false;
+    if (Date.now() - payload.ts > OTP_TTL_MS) return false;
+    const expected = hmac(`${e}|${code.trim()}|${payload.ts}`);
+    if (payload.sig.length !== expected.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(payload.sig, "hex"), Buffer.from(expected, "hex"));
   } catch {
-    return {};
-  }
-}
-
-async function writeData(data: Record<string, OTPEntry>) {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
-}
-
-export async function createOTP(email: string): Promise<string> {
-  const code = String(Math.floor(100000 + crypto.getRandomValues(new Uint32Array(1))[0] % 900000));
-  const data = await readData();
-  // Clean expired
-  const now = Date.now();
-  for (const k of Object.keys(data)) {
-    if (data[k].expiresAt < now) delete data[k];
-  }
-  data[email] = { email, code, createdAt: now, expiresAt: now + OTP_TTL_MS, attempts: 0 };
-  await writeData(data);
-  return code;
-}
-
-export async function verifyOTP(email: string, code: string): Promise<boolean> {
-  const data = await readData();
-  const entry = data[email];
-  if (!entry) return false;
-  if (Date.now() > entry.expiresAt) {
-    delete data[email];
-    await writeData(data);
     return false;
   }
-  entry.attempts += 1;
-  if (entry.attempts > 5) {
-    delete data[email];
-    await writeData(data);
-    return false;
-  }
-  if (entry.code !== code.trim()) {
-    await writeData(data);
-    return false;
-  }
-  delete data[email];
-  await writeData(data);
-  return true;
 }

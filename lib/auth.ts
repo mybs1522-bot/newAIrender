@@ -15,10 +15,11 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         code: { label: "Code", type: "text" },
+        token: { label: "Token", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.code) return null;
-        const valid = await verifyOTP(credentials.email.toLowerCase().trim(), credentials.code);
+        if (!credentials?.email || !credentials?.code || !credentials?.token) return null;
+        const valid = verifyOTP(credentials.email, credentials.code, credentials.token);
         if (!valid) return null;
         return {
           id: credentials.email.toLowerCase().trim(),

@@ -11,6 +11,7 @@ function OTPForm() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [otpToken, setOtpToken] = useState("");
   const [success, setSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,12 +26,14 @@ function OTPForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
+    const body = await res.json().catch(() => ({}));
     setLoading(false);
     if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
       setError(body.detail ?? "Could not send code. Try again.");
       return;
     }
+    const token = body.token;
+    setOtpToken(token);
     setStep("otp");
   };
 
@@ -39,7 +42,7 @@ function OTPForm() {
     if (code.length < 6) { setError("Enter the 6-digit code from your email."); return; }
     setLoading(true);
     const { signIn } = await import("next-auth/react");
-    const result = await signIn("otp", { email, code, redirect: false, callbackUrl: "/render" });
+    const result = await signIn("otp", { email, code, token: otpToken, redirect: false, callbackUrl: "/render" });
     setLoading(false);
     if (result?.error) { setError("Invalid or expired code. Try again."); return; }
     setSuccess(true);
@@ -118,7 +121,7 @@ function OTPForm() {
         Verify &amp; sign in
       </Button>
       <button
-        onClick={() => { setStep("email"); setCode(""); setError(""); }}
+        onClick={() => { setStep("email"); setCode(""); setOtpToken(""); setError(""); }}
         className="w-full text-xs text-muted-foreground flex items-center justify-center gap-1 hover:text-foreground transition-colors"
       >
         <ArrowLeft className="h-3 w-3" /> Change email

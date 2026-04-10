@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const code = await createOTP(email.toLowerCase().trim());
+  const { code, token } = createOTP(email.toLowerCase().trim());
 
   const { error } = await resend.emails.send({
     from: "Interior Designer AI <design@avada.space>",
@@ -41,5 +41,5 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, token });
 }
