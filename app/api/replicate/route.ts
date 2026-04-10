@@ -212,8 +212,14 @@ const INTERIOR_LIGHT_DESC: Record<string, string> = {
 /* ─── Interior prompt ───────────────────────────────────────────────────── */
 function buildEditPrompt(q: DesignQuestionnaire): string {
   const matChanges: string[] = [];
-  if (WALL[q.wallFinish]) matChanges.push(`walls: ${WALL[q.wallFinish]}`);
-  if (FLOOR[q.floorMaterial])
+  const customWall = q.customColors?.[`wallFinish:${q.wallFinish}`];
+  const customFloor = q.customColors?.[`floorMaterial:${q.floorMaterial}`];
+  const customWood = q.customColors?.[`woodTone:${q.woodTone}`];
+  const customMetal = q.customColors?.[`metalAccent:${q.metalAccent}`];
+  if (customWall) matChanges.push(`walls: custom hex color ${customWall}`);
+  else if (WALL[q.wallFinish]) matChanges.push(`walls: ${WALL[q.wallFinish]}`);
+  if (customFloor) matChanges.push(`floor: custom hex color ${customFloor}`);
+  else if (FLOOR[q.floorMaterial])
     matChanges.push(`floor: ${FLOOR[q.floorMaterial]}`);
   if (PALETTE[q.colorPalette])
     matChanges.push(`color scheme: ${PALETTE[q.colorPalette]}`);
@@ -221,8 +227,11 @@ function buildEditPrompt(q: DesignQuestionnaire): string {
     matChanges.push(
       `custom accent color ${q.accentColor} on key decorative surfaces`
     );
-  if (WOOD[q.woodTone]) matChanges.push(`wood: ${WOOD[q.woodTone]}`);
-  if (METAL[q.metalAccent]) matChanges.push(`metal: ${METAL[q.metalAccent]}`);
+  if (customWood) matChanges.push(`wood: custom hex color ${customWood}`);
+  else if (WOOD[q.woodTone]) matChanges.push(`wood: ${WOOD[q.woodTone]}`);
+  if (customMetal) matChanges.push(`metal: custom hex color ${customMetal}`);
+  else if (METAL[q.metalAccent])
+    matChanges.push(`metal: ${METAL[q.metalAccent]}`);
   if (TEXTILE[q.textileRichness])
     matChanges.push(`textiles: ${TEXTILE[q.textileRichness]}`);
   if (MOOD[q.mood]) matChanges.push(MOOD[q.mood]);

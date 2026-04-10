@@ -90,4 +90,5 @@ export interface DesignQuestionnaire {
   greenery: "none" | "minimal" | "moderate" | "lush-botanical";
   specialElements: string[];
   accentColor?: string;
+  customColors?: Record<string, string>;
 }

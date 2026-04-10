@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Wand2, CheckCircle2 } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Wand2,
+  CheckCircle2,
+  Pipette,
+} from "lucide-react";
 import type { DesignQuestionnaire } from "@/types";
 
 /* ─── Default state ──────────────────────────────────────────────────────── */
@@ -73,6 +79,8 @@ function ColorSwatchCard({
   label,
   description,
   border,
+  customColor,
+  onCustomColorChange,
 }: {
   selected: boolean;
   onClick: () => void;
@@ -80,25 +88,43 @@ function ColorSwatchCard({
   label: string;
   description?: string;
   border?: boolean;
+  customColor?: string;
+  onCustomColorChange?: (hex: string) => void;
 }) {
+  const displayColor = customColor ?? color;
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
-        "flex flex-col gap-2 rounded-2xl border p-3 text-left transition-all",
+        "relative flex flex-col gap-2 rounded-2xl border p-3 text-left transition-all",
         selected
           ? "border-foreground/40 bg-foreground/10 ring-foreground/30 ring-1"
           : "border-foreground/10 bg-foreground/5 hover:border-foreground/20 hover:bg-foreground/8"
       )}
     >
-      <div
-        className={cn(
-          "h-10 w-full rounded-xl",
-          border && "border-foreground/15 border"
-        )}
-        style={{ backgroundColor: color }}
-      />
+      <div className="relative">
+        <div
+          className={cn(
+            "h-10 w-full rounded-xl",
+            border && "border-foreground/15 border"
+          )}
+          style={{ backgroundColor: displayColor }}
+        />
+        <label
+          title="Customize color"
+          className="absolute top-1 right-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-black/20 backdrop-blur-sm transition-opacity hover:bg-black/40"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <input
+            type="color"
+            value={displayColor}
+            className="sr-only"
+            onChange={(e) => onCustomColorChange?.(e.target.value)}
+          />
+          <Pipette className="h-2.5 w-2.5 text-white drop-shadow" />
+        </label>
+      </div>
       <span className="text-sm leading-tight font-semibold">{label}</span>
       {description && (
         <span className="text-muted-foreground text-xs leading-snug">
@@ -228,6 +254,14 @@ export function DesignQuestionnaireForm({
     key: K,
     val: DesignQuestionnaire[K]
   ) => onChange({ ...value, [key]: val });
+
+  const cc = (field: string, val: string) =>
+    value.customColors?.[`${field}:${val}`];
+  const setCC = (field: string, val: string, hex: string) =>
+    onChange({
+      ...value,
+      customColors: { ...value.customColors, [`${field}:${val}`]: hex },
+    });
 
   const toggleSpecial = (el: string) => {
     const cur = value.specialElements;
@@ -788,6 +822,8 @@ export function DesignQuestionnaireForm({
                   color={o.color}
                   label={o.label}
                   border={o.border}
+                  customColor={cc("wallFinish", o.v)}
+                  onCustomColorChange={(hex) => setCC("wallFinish", o.v, hex)}
                 />
               ))}
             </div>
@@ -909,6 +945,10 @@ export function DesignQuestionnaireForm({
                       label={o.label}
                       description={o.d}
                       border={o.border}
+                      customColor={cc("floorMaterial", o.v)}
+                      onCustomColorChange={(hex) =>
+                        setCC("floorMaterial", o.v, hex)
+                      }
                     />
                   ))}
                 </div>
@@ -1020,6 +1060,8 @@ export function DesignQuestionnaireForm({
                   color={o.color}
                   label={o.label}
                   border={o.border}
+                  customColor={cc("woodTone", o.v)}
+                  onCustomColorChange={(hex) => setCC("woodTone", o.v, hex)}
                 />
               ))}
             </div>
@@ -1062,6 +1104,8 @@ export function DesignQuestionnaireForm({
                   color={o.color}
                   label={o.label}
                   border={o.border}
+                  customColor={cc("metalAccent", o.v)}
+                  onCustomColorChange={(hex) => setCC("metalAccent", o.v, hex)}
                 />
               ))}
             </div>
