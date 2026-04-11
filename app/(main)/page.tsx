@@ -17,6 +17,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { GoogleAuth } from "@/components/google-auth";
 import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
+import { StatsDashboard } from "@/components/stats-dashboard";
 
 const features = [
   {
@@ -172,6 +173,9 @@ export default function HomePage() {
               <span>100% layout preserved</span>
             </div>
           </section>
+
+          {/* ── Stats dashboard ───────────────────────────────── */}
+          <StatsDashboard />
 
           {/* ── Live demo ─────────────────────────────────────── */}
           <LiveDemoSection />
