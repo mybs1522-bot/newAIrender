@@ -132,6 +132,42 @@ export default function HomePage() {
         <CinematicFooter windowsHref="#" macHref="#" />
 
         <div className="mx-auto w-full max-w-5xl space-y-16 px-6 py-16 pb-24 lg:px-8">
+          {/* ── How it works ─────────────────────────────────── */}
+          <section
+            id="how-it-works"
+            className="bg-background rounded-xl border px-6 py-12 sm:px-12"
+          >
+            <div className="mb-10 text-center">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                How it works
+              </h2>
+              <p className="text-muted-foreground mt-2 text-sm">
+                Three steps from photo to polished design.
+              </p>
+            </div>
+            <div className="grid gap-8 sm:grid-cols-3">
+              {steps.map((s) => (
+                <div
+                  key={s.number}
+                  className="flex flex-col items-center gap-4 text-center"
+                >
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
+                    <s.icon className="h-5 w-5" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+                      {s.number}
+                    </p>
+                    <p className="mt-1 font-medium">{s.title}</p>
+                    <p className="text-muted-foreground mt-1.5 text-sm leading-6">
+                      {s.body}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── Stats dashboard ───────────────────────────────── */}
           <StatsDashboard />
 
@@ -208,44 +244,6 @@ export default function HomePage() {
             </div>
           </section>
         </div>
-      </div>
-
-      {/* ── How it works ─────────────────────────────────────── */}
-      <div className="mx-auto w-full max-w-5xl px-6 py-16 lg:px-8">
-        <section
-          id="how-it-works"
-          className="bg-background rounded-xl border px-6 py-12 sm:px-12"
-        >
-          <div className="mb-10 text-center">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              How it works
-            </h2>
-            <p className="text-muted-foreground mt-2 text-sm">
-              Three steps from photo to polished design.
-            </p>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-3">
-            {steps.map((s) => (
-              <div
-                key={s.number}
-                className="flex flex-col items-center gap-4 text-center"
-              >
-                <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
-                  <s.icon className="h-5 w-5" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
-                    {s.number}
-                  </p>
-                  <p className="mt-1 font-medium">{s.title}</p>
-                  <p className="text-muted-foreground mt-1.5 text-sm leading-6">
-                    {s.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
 
       {/* ── Live demo (bottom) ──────────────────────────────── */}
