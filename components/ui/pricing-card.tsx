@@ -44,7 +44,7 @@ export function PricingCard({ onStartTrial }: PricingCardProps) {
           <h2 className="text-2xl font-semibold tracking-tight">Pro Plan</h2>
         </div>
         <p className="text-muted-foreground text-sm">
-          Everything you need to render like a pro. Start free for 7 days.
+          Activate your 7-day free trial to unlock the download.
         </p>
       </div>
 
@@ -144,7 +144,7 @@ export function PricingCard({ onStartTrial }: PricingCardProps) {
           className="w-full text-base font-bold"
           onClick={onStartTrial}
         >
-          Start 7-Day Free Trial
+          Activate Trial & Download
         </Button>
         <p className="text-muted-foreground text-center text-xs">
           No credit card required · Cancel anytime

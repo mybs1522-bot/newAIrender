@@ -37,11 +37,10 @@ export function DownloadPricingModal({
       <DialogContent className="border-border bg-background max-w-[500px] overflow-hidden p-0">
         <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-bold">
-            Get full access — free for 7 days
+            Activate trial to download
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-sm">
-            Download is included. Start rendering immediately after your trial
-            starts.
+            Start your 7-day free trial to download the app and begin rendering.
           </DialogDescription>
         </DialogHeader>
         <div className="px-6 pt-4 pb-6">
