@@ -19,6 +19,7 @@ import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { TrustedBySection } from "@/components/trusted-by-section";
+import { DownloadSection } from "@/components/download-section";
 
 const features = [
   {
@@ -314,6 +315,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      <DownloadSection />
       <CinematicFooter windowsHref="#" macHref="#" />
     </>
   );
