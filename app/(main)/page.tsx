@@ -19,6 +19,7 @@ import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { TrustedBySection } from "@/components/trusted-by-section";
+import { BeforeAfterCards } from "@/components/ui/3d-card";
 
 const features = [
   {
@@ -132,6 +133,11 @@ export default function HomePage() {
         <CinematicFooter windowsHref="#" macHref="#" />
 
         <div className="mx-auto w-full max-w-5xl space-y-16 px-6 py-16 pb-24 lg:px-8">
+          {/* ── Before / After cards ─────────────────────────── */}
+          <div className="flex justify-center py-4">
+            <BeforeAfterCards />
+          </div>
+
           {/* ── How it works ─────────────────────────────────── */}
           <section
             id="how-it-works"
