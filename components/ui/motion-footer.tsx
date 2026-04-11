@@ -342,14 +342,6 @@ export function CinematicFooter({
 
             {/* Live demo */}
             <div className="mb-10 w-full max-w-3xl">
-              <div className="mb-4 text-center">
-                <h3 className="text-lg font-semibold tracking-tight md:text-xl">
-                  Live demo
-                </h3>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  See the transformation — upload, configure, and generate.
-                </p>
-              </div>
               <LiveDemoSection />
             </div>
 
