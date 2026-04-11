@@ -101,13 +101,14 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 
   /* Glass design tokens — light */
-  --glass-bg:           rgba(255, 255, 255, 0.72);
-  --glass-bg-strong:    rgba(255, 255, 255, 0.85);
-  --glass-border:       rgba(0, 0, 0, 0.08);
-  --glass-border-strong:rgba(0, 0, 0, 0.12);
-  --glass-shadow:       0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --glass-shadow-strong:0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.05);
-  --glass-inset:        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-strong: rgba(0, 0, 0, 0.12);
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --glass-shadow-strong:
+    0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --glass-inset-strong: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -146,13 +147,14 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 
   /* Glass design tokens — dark */
-  --glass-bg:           rgba(255, 255, 255, 0.04);
-  --glass-bg-strong:    rgba(255, 255, 255, 0.07);
-  --glass-border:       rgba(255, 255, 255, 0.08);
-  --glass-border-strong:rgba(255, 255, 255, 0.12);
-  --glass-shadow:       0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --glass-shadow-strong:0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
-  --glass-inset:        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-strong: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --glass-shadow-strong:
+    0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   --glass-inset-strong: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -168,7 +170,6 @@
   }
 }
 
-
 /* ─── Glass utility classes ─────────────────────────────────── */
 @layer utilities {
   .glass-panel {
@@ -177,7 +178,9 @@
     box-shadow: var(--glass-shadow), var(--glass-inset);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    transition:
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
 
   .glass-panel-strong {
@@ -186,11 +189,18 @@
     box-shadow: var(--glass-shadow-strong), var(--glass-inset-strong);
     backdrop-filter: blur(28px) saturate(200%);
     -webkit-backdrop-filter: blur(28px) saturate(200%);
-    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    transition:
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
 
   .glass-divider {
-    background: linear-gradient(90deg, transparent, var(--glass-border-strong), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--glass-border-strong),
+      transparent
+    );
     height: 1px;
     border: none;
   }
@@ -199,4 +209,13 @@
     box-shadow: var(--glass-shadow);
   }
 
+  :root {
+    --gradient-color: #8350e8;
+    --sparkles-color: #8350e8;
+  }
+
+  .dark {
+    --gradient-color: #8350e8;
+    --sparkles-color: #ffffff;
+  }
 }

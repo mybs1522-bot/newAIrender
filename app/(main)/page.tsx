@@ -18,6 +18,7 @@ import { GoogleAuth } from "@/components/google-auth";
 import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
+import { TrustedBySection } from "@/components/trusted-by-section";
 
 const features = [
   {
@@ -201,6 +202,9 @@ export default function HomePage() {
 
           {/* ── Live demo ─────────────────────────────────────── */}
           <LiveDemoSection />
+
+          {/* ── Trusted by ────────────────────────────────── */}
+          <TrustedBySection />
 
           {/* ── Features bento ─────────────────────────────────── */}
           <section id="features">
