@@ -188,11 +188,9 @@ export default function HomePage() {
             </div>
 
             <div className="text-muted-foreground flex flex-wrap justify-center gap-x-8 gap-y-2 pt-2 text-sm">
-              <span>🖥️ Runs 100% locally</span>
+              <span>🖥️ Runs locally</span>
               <span>·</span>
               <span>⚡ Renders in &lt; 30 s</span>
-              <span>·</span>
-              <span>💸 No subscription needed</span>
               <span>·</span>
               <span>20+ design styles</span>
             </div>
