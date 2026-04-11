@@ -9,7 +9,7 @@ export function StatsDashboard() {
   return (
     <div className="flex justify-center">
       <MarketingDashboard
-        title="Platform at a Glance"
+        title="Fastest Growing AI Rendering Engine"
         team={{
           memberCount: 32550,
           label: "Downloads",
