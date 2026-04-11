@@ -24,6 +24,7 @@ import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { TrustedBySection } from "@/components/trusted-by-section";
 import { BeforeAfterCards } from "@/components/ui/3d-card";
+import { TestimonialsSection } from "@/components/testimonials-section";
 import { Footer } from "@/components/ui/modem-animated-footer";
 
 const features = [
@@ -184,6 +185,9 @@ export default function HomePage() {
 
           {/* ── Trusted by ────────────────────────────────── */}
           <TrustedBySection />
+
+          {/* ── Testimonials ──────────────────────────────── */}
+          <TestimonialsSection />
         </div>
       </div>
 
