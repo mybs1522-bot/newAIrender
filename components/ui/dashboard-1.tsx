@@ -55,7 +55,7 @@ const AnimatedNumber = ({
   );
 
   React.useEffect(() => {
-    const controls = animate(count, value, { duration: 1.5, ease: "easeOut" });
+    const controls = animate(count, value, { duration: 0.9, ease: "easeOut" });
     return controls.stop;
   }, [value, count]);
 
