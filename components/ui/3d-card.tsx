@@ -30,7 +30,7 @@ const PhotoCard = ({
 
   return (
     <div
-      className="absolute h-[220px] w-[150px] rounded-md bg-white p-2 shadow-2xl dark:bg-zinc-900"
+      className="bg-background/40 border-border/40 absolute h-[220px] w-[150px] rounded-md border p-2 shadow-lg backdrop-blur-sm"
       style={{
         transform: `rotate(${rotation}deg) scale(${isActive ? 1.07 : 1})`,
         zIndex: isActive ? 20 : 1,
@@ -81,27 +81,18 @@ const AnimatedGrid = () => {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
       <div
-        className="absolute inset-0 dark:hidden"
+        className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(circle at 50% 50%, transparent 0%, #ffffff 60%, #ffffff 100%),
-            linear-gradient(#e5e7eb 1px, transparent 1px),
-            linear-gradient(90deg, #e5e7eb 1px, transparent 1px)
+            linear-gradient(rgba(156,163,175,0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(156,163,175,0.15) 1px, transparent 1px)
           `,
-          backgroundSize: "cover, 40px 40px, 40px 40px",
-          backgroundPosition: `center, ${offset}px ${offset}px, ${offset}px ${offset}px`,
-        }}
-      />
-      <div
-        className="absolute inset-0 hidden dark:block"
-        style={{
-          background: `
-            radial-gradient(circle at 50% 50%, transparent 0%, #0f172a 60%, #0f172a 100%),
-            linear-gradient(#374151 1px, transparent 1px),
-            linear-gradient(90deg, #374151 1px, transparent 1px)
-          `,
-          backgroundSize: "cover, 40px 40px, 40px 40px",
-          backgroundPosition: `center, ${offset}px ${offset}px, ${offset}px ${offset}px`,
+          backgroundSize: "40px 40px",
+          backgroundPosition: `${offset}px ${offset}px, ${offset}px ${offset}px`,
+          maskImage:
+            "radial-gradient(circle at 50% 50%, black 30%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(circle at 50% 50%, black 30%, transparent 75%)",
         }}
       />
     </div>
