@@ -135,9 +135,6 @@ export default function HomePage() {
           {/* ── Stats dashboard ───────────────────────────────── */}
           <StatsDashboard />
 
-          {/* ── Live demo ─────────────────────────────────────── */}
-          <LiveDemoSection />
-
           {/* ── Trusted by ────────────────────────────────── */}
           <TrustedBySection />
 
@@ -249,6 +246,11 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+      </div>
+
+      {/* ── Live demo (bottom) ──────────────────────────────── */}
+      <div className="mx-auto w-full max-w-5xl px-6 pb-16 lg:px-8">
+        <LiveDemoSection />
       </div>
     </>
   );

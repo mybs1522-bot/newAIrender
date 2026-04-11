@@ -6,7 +6,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { Lock } from "lucide-react";
-import { LiveDemoSection } from "@/components/live-demo-section";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -341,11 +340,6 @@ export function CinematicFooter({
             <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
               Native desktop experience · offline setup · cloud AI generation
             </p>
-
-            {/* Demo video */}
-            <div className="mb-8 w-full max-w-3xl">
-              <LiveDemoSection />
-            </div>
 
             <div
               ref={linksRef}
