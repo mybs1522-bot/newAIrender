@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+import { LiveDemoSection } from "@/components/live-demo-section";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -338,6 +339,19 @@ export function CinematicFooter({
             <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
               Native desktop experience · offline setup · cloud AI generation
             </p>
+
+            {/* Live demo */}
+            <div className="mb-10 w-full max-w-3xl">
+              <div className="mb-4 text-center">
+                <h3 className="text-lg font-semibold tracking-tight md:text-xl">
+                  Live demo
+                </h3>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  See the transformation — upload, configure, and generate.
+                </p>
+              </div>
+              <LiveDemoSection />
+            </div>
 
             <div
               ref={linksRef}
