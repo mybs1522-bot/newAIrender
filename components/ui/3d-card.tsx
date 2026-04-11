@@ -30,7 +30,7 @@ const PhotoCard = ({
 
   return (
     <div
-      className="bg-background/40 border-border/40 absolute h-[220px] w-[150px] rounded-md border p-2 shadow-lg backdrop-blur-sm"
+      className="bg-background/40 border-border/40 absolute h-[220px] w-[150px] rounded-md border p-2 shadow-lg backdrop-blur-sm lg:h-[300px] lg:w-[210px]"
       style={{
         transform: `rotate(${rotation}deg) scale(${isActive ? 1.07 : 1})`,
         zIndex: isActive ? 20 : 1,
@@ -110,7 +110,7 @@ export function BeforeAfterCards() {
   }, []);
 
   return (
-    <div className="relative flex h-[300px] w-[300px] items-center justify-center">
+    <div className="relative flex h-[300px] w-[300px] items-center justify-center lg:h-[440px] lg:w-[440px]">
       <AnimatedGrid />
 
       {/* Before card */}

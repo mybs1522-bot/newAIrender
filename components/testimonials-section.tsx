@@ -89,16 +89,16 @@ export function TestimonialsSection() {
               Testimonials
             </div>
           </div>
-          <h2 className="mt-5 text-center text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
+          <h2 className="mt-5 text-center text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
             What designers & architects say
           </h2>
-          <p className="text-muted-foreground mt-5 text-center">
+          <p className="text-muted-foreground mt-5 text-center lg:text-lg">
             Real feedback from interior designers and architects who replaced
             expensive GPU setups with our AI renderer.
           </p>
         </motion.div>
 
-        <div className="mt-10 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
+        <div className="mt-10 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] lg:max-h-[900px] lg:gap-8">
           <TestimonialsColumn testimonials={firstColumn} duration={15} />
           <TestimonialsColumn
             testimonials={secondColumn}

@@ -138,7 +138,7 @@ export default function HomePage() {
         {/* ── Download the App (top) ───────────────────────── */}
         <CinematicFooter windowsHref="#" macHref="#" />
 
-        <div className="w-full space-y-16 px-6 py-16 pb-24 lg:px-16 xl:px-24">
+        <div className="w-full space-y-20 px-6 py-16 pb-24 lg:space-y-28 lg:px-16 lg:py-24 xl:px-24">
           {/* ── Before / After cards ─────────────────────────── */}
           <div className="flex justify-center py-4">
             <BeforeAfterCards />
@@ -147,31 +147,36 @@ export default function HomePage() {
           {/* ── How it works ─────────────────────────────────── */}
           <section
             id="how-it-works"
-            className="bg-background rounded-xl border px-6 py-12 sm:px-12"
+            className="bg-background rounded-2xl border px-6 py-12 sm:px-12 lg:px-20 lg:py-20"
           >
-            <div className="mb-10 text-center">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            <div className="mb-10 text-center lg:mb-16">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl xl:text-5xl">
                 How it works
               </h2>
-              <p className="text-muted-foreground mt-2 text-sm">
+              <p className="text-muted-foreground mt-2 text-sm lg:mt-4 lg:text-base">
                 Three steps from photo to polished design.
               </p>
             </div>
-            <div className="grid gap-8 sm:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-3 lg:gap-14">
               {steps.map((s) => (
                 <div
                   key={s.number}
-                  className="flex flex-col items-center gap-4 text-center"
+                  className="flex flex-col items-center gap-4 text-center lg:gap-6"
                 >
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
-                    <s.icon className="h-5 w-5" strokeWidth={1.5} />
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border lg:h-20 lg:w-20 dark:border-white/10 dark:before:border-white/5">
+                    <s.icon
+                      className="h-5 w-5 lg:h-8 lg:w-8"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <div>
                     <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
                       {s.number}
                     </p>
-                    <p className="mt-1 font-medium">{s.title}</p>
-                    <p className="text-muted-foreground mt-1.5 text-sm leading-6">
+                    <p className="mt-1 font-medium lg:mt-2 lg:text-xl">
+                      {s.title}
+                    </p>
+                    <p className="text-muted-foreground mt-1.5 text-sm leading-6 lg:mt-3 lg:text-base lg:leading-7">
                       {s.body}
                     </p>
                   </div>
