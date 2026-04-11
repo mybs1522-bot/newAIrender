@@ -101,16 +101,16 @@ function OTPBox({
     setTimeout(onComplete, 0);
   };
 
-  const ringColor =
+  const borderColor =
     state === "error"
-      ? "ring-red-400"
+      ? "border-red-300 bg-red-50"
       : state === "success"
-        ? "ring-emerald-500"
-        : "ring-gray-200 focus-within:ring-violet-400";
+        ? "border-emerald-300 bg-emerald-50"
+        : "border-gray-200 bg-gray-50 focus-within:border-violet-400 focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(139,92,246,0.12)]";
 
   return (
     <motion.div
-      className={`h-14 w-11 overflow-hidden rounded-xl ring-2 transition-all duration-200 ${ringColor}`}
+      className={`h-[68px] w-14 overflow-hidden rounded-2xl border-2 transition-all duration-200 ${borderColor}`}
       initial={{ opacity: 0, y: 10 }}
       animate={ctrl}
     >
@@ -125,7 +125,7 @@ function OTPBox({
         onFocus={onFocus}
         onBlur={onBlur}
         disabled={state === "success"}
-        className="h-full w-full bg-white text-center text-2xl font-semibold text-gray-900 caret-violet-600 outline-none disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-full w-full bg-transparent text-center text-2xl font-bold text-gray-800 caret-violet-600 outline-none disabled:cursor-not-allowed disabled:opacity-60"
       />
     </motion.div>
   );

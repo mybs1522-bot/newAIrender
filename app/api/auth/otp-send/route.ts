@@ -11,6 +11,12 @@ export async function POST(req: NextRequest) {
 
   const { code, token } = createOTP(email.toLowerCase().trim());
 
+  // In development: skip email and log code to terminal
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`\n🔑 OTP for ${email}: ${code}\n`);
+    return NextResponse.json({ ok: true, token });
+  }
+
   const { error } = await resend.emails.send({
     from: "Interior Designer AI <design@avada.space>",
     to: email,
