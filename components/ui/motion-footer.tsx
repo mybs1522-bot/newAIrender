@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { Lock } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -381,72 +380,7 @@ export function CinematicFooter({
                   </div>
                 </MagneticButton>
               </div>
-
-              {/* Secondary links */}
-              <div className="mt-2 flex flex-wrap justify-center gap-3 md:gap-4">
-                {[
-                  { label: "Privacy Policy", href: "#" },
-                  { label: "Terms of Service", href: "#" },
-                  { label: "Help & Support", href: "/help" },
-                ].map((l) => (
-                  <MagneticButton
-                    key={l.label}
-                    as="a"
-                    href={l.href}
-                    className="footer-glass-pill text-muted-foreground hover:text-foreground rounded-full px-5 py-2.5 text-xs font-medium md:text-sm"
-                  >
-                    {l.label}
-                  </MagneticButton>
-                ))}
-              </div>
-
-              <p className="text-muted-foreground mt-1 flex items-center gap-1.5 text-xs">
-                <Lock className="h-3 w-3" />
-                Free to download · Premium subscription required for AI
-                generation
-              </p>
             </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="relative z-20 flex w-full flex-col items-center justify-between gap-4 px-6 pb-8 md:flex-row md:px-12">
-            <div className="text-muted-foreground order-2 text-[10px] font-semibold tracking-widest uppercase md:order-1 md:text-xs">
-              {new Date().getFullYear()} Interior Designer AI. All rights ©{" "}
-              {new Date().getFullYear()} Interior Designer AI. All rights
-              reserved.
-            </div>
-
-            <div className="footer-glass-pill border-border/50 order-1 flex cursor-default items-center gap-2 rounded-full px-5 py-2.5 md:order-2">
-              <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase md:text-xs">
-                Crafted with
-              </span>
-              <span className="animate-footer-heartbeat text-destructive text-sm">
-                ❤
-              </span>
-              <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase md:text-xs">
-                for designers
-              </span>
-            </div>
-
-            <MagneticButton
-              as="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="footer-glass-pill text-muted-foreground hover:text-foreground group order-3 flex h-10 w-10 items-center justify-center rounded-full"
-            >
-              <svg
-                className="h-4 w-4 transform transition-transform duration-300 group-hover:-translate-y-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-              </svg>
-            </MagneticButton>
           </div>
         </footer>
       </div>
