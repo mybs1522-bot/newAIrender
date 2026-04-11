@@ -10,6 +10,10 @@ import {
   Layers,
   Camera,
   Download,
+  Twitter,
+  Linkedin,
+  Github,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +24,7 @@ import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { TrustedBySection } from "@/components/trusted-by-section";
 import { BeforeAfterCards } from "@/components/ui/3d-card";
+import { Footer } from "@/components/ui/modem-animated-footer";
 
 const features = [
   {
@@ -256,6 +261,44 @@ export default function HomePage() {
       <div className="mx-auto w-full max-w-5xl px-6 pb-16 lg:px-8">
         <LiveDemoSection />
       </div>
+
+      {/* ── Site footer ─────────────────────────────────────── */}
+      <Footer
+        brandName="Interior Designer AI"
+        brandDescription="Transform any room photo into a photorealistic AI render in 30 seconds. No GPU required — runs entirely on your device."
+        socialLinks={[
+          {
+            icon: <Twitter className="h-6 w-6" />,
+            href: "https://twitter.com",
+            label: "Twitter",
+          },
+          {
+            icon: <Linkedin className="h-6 w-6" />,
+            href: "https://linkedin.com",
+            label: "LinkedIn",
+          },
+          {
+            icon: <Github className="h-6 w-6" />,
+            href: "https://github.com",
+            label: "GitHub",
+          },
+          {
+            icon: <Mail className="h-6 w-6" />,
+            href: "mailto:hello@interiordesigner.ai",
+            label: "Email",
+          },
+        ]}
+        navLinks={[
+          { label: "Render Studio", href: "/render" },
+          { label: "Help & Support", href: "/help" },
+          { label: "Settings", href: "/settings" },
+          { label: "Privacy Policy", href: "#" },
+          { label: "Terms of Service", href: "#" },
+        ]}
+        brandIcon={
+          <Palette className="text-background h-8 w-8 drop-shadow-lg sm:h-10 sm:w-10 md:h-14 md:w-14" />
+        }
+      />
     </>
   );
 }
