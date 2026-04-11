@@ -599,14 +599,12 @@ export function LiveDemoSection() {
       </div>
 
       {/* Social proof */}
-      <div className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
+      <div className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-medium md:text-base lg:text-lg">
         <span>⚡ Avg render: 18 s</span>
         <span>·</span>
         <span>🎨 20+ styles</span>
         <span>·</span>
         <span>📐 Layout preserved</span>
-        <span>·</span>
-        <span>🔒 Photos never stored</span>
       </div>
     </section>
   );
