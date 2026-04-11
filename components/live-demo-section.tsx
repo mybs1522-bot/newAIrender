@@ -11,58 +11,57 @@ import Image from "next/image";
 import { Sparkles, Upload, RotateCcw, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/* ─── Images ─────────────────────────────────────────────── */
 const BEFORE =
   "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=85";
 const AFTER =
   "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=900&q=85";
 
-/* ─── Option groups ───────────────────────────────────────── */
 const OPTIONS = [
   {
-    key: "room",
+    key: "room" as const,
     label: "Room Type",
     choices: ["Living Room", "Bedroom", "Kitchen", "Office"],
     autoSelect: "Living Room",
   },
   {
-    key: "style",
+    key: "style" as const,
     label: "Design Style",
     choices: ["Modern", "Scandinavian", "Industrial", "Coastal"],
     autoSelect: "Modern",
   },
   {
-    key: "lighting",
+    key: "lighting" as const,
     label: "Lighting",
     choices: ["Natural", "Warm", "Dramatic", "Cool"],
     autoSelect: "Warm",
   },
   {
-    key: "palette",
+    key: "palette" as const,
     label: "Color Palette",
     choices: ["Neutral", "Earthy", "Bold", "Monochrome"],
     autoSelect: "Neutral",
   },
   {
-    key: "material",
+    key: "material" as const,
     label: "Materials",
     choices: ["Wood", "Marble", "Concrete", "Linen"],
     autoSelect: "Wood",
   },
-] as const;
+];
 
-type OptionKey = (typeof OPTIONS)[number]["key"];
+type OptionKey = "room" | "style" | "lighting" | "palette" | "material";
 type Selections = Partial<Record<OptionKey, string>>;
+type RippleMap = Partial<Record<string, boolean>>;
 
-/* ─── Cursor SVG ──────────────────────────────────────────── */
+/* ── Cursor SVG ───────────────────────────────────────── */
 function CursorSVG({ pressing }: { pressing: boolean }) {
   return (
     <motion.svg
-      width="24"
-      height="24"
+      width="22"
+      height="22"
       viewBox="0 0 24 24"
       fill="none"
-      animate={{ scale: pressing ? 0.8 : 1 }}
+      animate={{ scale: pressing ? 0.78 : 1 }}
       transition={{ type: "spring", stiffness: 700, damping: 28 }}
       style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
     >
@@ -77,7 +76,7 @@ function CursorSVG({ pressing }: { pressing: boolean }) {
   );
 }
 
-/* ─── Click ripple ────────────────────────────────────────── */
+/* ── Click ripple ─────────────────────────────────────── */
 function Ripple() {
   return (
     <motion.span
@@ -89,18 +88,14 @@ function Ripple() {
   );
 }
 
-/* ─── Animated option chip ────────────────────────────────── */
-function Chip({
-  label,
-  selected,
-  ripple,
-  refProp,
-}: {
+/* ── Option chip ──────────────────────────────────────── */
+interface ChipProps {
   label: string;
   selected: boolean;
   ripple: boolean;
-  refProp?: React.Ref<HTMLButtonElement>;
-}) {
+  refProp?: (el: HTMLButtonElement | null) => void;
+}
+function Chip({ label, selected, ripple, refProp }: ChipProps) {
   return (
     <div className="relative">
       {ripple && <Ripple />}
@@ -110,11 +105,11 @@ function Chip({
         animate={selected ? { scale: [1, 1.18, 0.96, 1] } : { scale: 1 }}
         transition={
           selected
-            ? { duration: 0.35, times: [0, 0.35, 0.65, 1], ease: "easeInOut" }
+            ? { duration: 0.32, times: [0, 0.35, 0.65, 1] }
             : { duration: 0.15 }
         }
         className={cn(
-          "relative rounded-lg border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap transition-colors duration-150",
+          "relative rounded-lg border px-2 py-0.5 text-[10px] font-medium whitespace-nowrap transition-colors duration-150 sm:px-2.5 sm:py-1 sm:text-[11px]",
           selected
             ? "border-foreground bg-foreground text-background shadow-sm"
             : "bg-muted/40 text-muted-foreground"
@@ -126,12 +121,11 @@ function Chip({
   );
 }
 
-/* ─── Main component ──────────────────────────────────────── */
+/* ── Main component ───────────────────────────────────── */
 export function LiveDemoSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const uploadBtnRef = useRef<HTMLButtonElement>(null);
   const generateBtnRef = useRef<HTMLButtonElement>(null);
-  /* one ref per auto-selected chip */
   const chipRefs = useRef<Partial<Record<OptionKey, HTMLButtonElement | null>>>(
     {}
   );
@@ -143,7 +137,7 @@ export function LiveDemoSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResult, setIsResult] = useState(false);
   const [selections, setSelections] = useState<Selections>({});
-  const [ripples, setRipples] = useState<Partial<Record<string, boolean>>>({});
+  const [ripples, setRipples] = useState<RippleMap>({});
   const [cursorVisible, setCursorVisible] = useState(false);
   const [pressing, setPressing] = useState(false);
 
@@ -153,29 +147,21 @@ export function LiveDemoSection() {
 
   const clearAll = () => timers.current.forEach(clearTimeout);
 
-  /* Move cursor to a DOM element */
   const moveTo = useCallback(
-    async (el: HTMLElement | null, duration = 0.65) => {
+    async (el: HTMLElement | null, duration = 0.6) => {
       if (!el || !containerRef.current) return;
       const eR = el.getBoundingClientRect();
       const cR = containerRef.current.getBoundingClientRect();
-      const tx = eR.left - cR.left + eR.width / 2 - 12;
+      const tx = eR.left - cR.left + eR.width / 2 - 11;
       const ty = eR.top - cR.top + eR.height / 2 - 3;
       await Promise.all([
-        animate(cursorX, tx, {
-          duration,
-          ease: [0.22, 1, 0.36, 1] /* expo-out — snappy */,
-        }),
-        animate(cursorY, ty, {
-          duration,
-          ease: [0.22, 1, 0.36, 1],
-        }),
+        animate(cursorX, tx, { duration, ease: [0.22, 1, 0.36, 1] }),
+        animate(cursorY, ty, { duration, ease: [0.22, 1, 0.36, 1] }),
       ]);
     },
     [cursorX, cursorY]
   );
 
-  /* Simulate a click with ripple + press */
   const doClick = useCallback((key: string) => {
     setPressing(true);
     setRipples((r) => ({ ...r, [key]: true }));
@@ -185,7 +171,6 @@ export function LiveDemoSection() {
     }, 380);
   }, []);
 
-  /* ─── Master sequence ─────────────────────────────────── */
   const runSequence = useCallback(() => {
     clearAll();
     setCursorVisible(false);
@@ -203,70 +188,63 @@ export function LiveDemoSection() {
       timers.current.push(id);
     };
 
-    /* Place cursor near upload area */
+    /* Place cursor, then move to Upload button */
     t(300, () => {
       const cR = containerRef.current?.getBoundingClientRect();
       const uR = uploadBtnRef.current?.getBoundingClientRect();
       if (cR && uR) {
-        cursorX.set(uR.right - cR.left + 10);
-        cursorY.set(uR.top - cR.top - 30);
+        cursorX.set(uR.right - cR.left + 8);
+        cursorY.set(uR.top - cR.top - 26);
       }
       setCursorVisible(true);
     });
+    t(380, () => moveTo(uploadBtnRef.current, 0.6));
 
-    /* Move to Upload Photo button */
-    t(380, () => moveTo(uploadBtnRef.current, 0.65));
+    /* Click upload → image in */
+    t(1050, () => doClick("upload"));
+    t(1070, () => setHasImage(true));
 
-    /* Click upload */
-    t(1100, () => doClick("upload"));
-    t(1120, () => setHasImage(true));
-
-    /* Sequentially select each option group */
-    const selectSequence: Array<{ key: OptionKey; ms: number }> = [
-      { key: "room", ms: 1700 },
-      { key: "style", ms: 2550 },
-      { key: "lighting", ms: 3350 },
-      { key: "palette", ms: 4100 },
-      { key: "material", ms: 4850 },
+    /* Select each option group sequentially */
+    const seq: Array<{ key: OptionKey; clickAt: number }> = [
+      { key: "room", clickAt: 1650 },
+      { key: "style", clickAt: 2380 },
+      { key: "lighting", clickAt: 3080 },
+      { key: "palette", clickAt: 3750 },
+      { key: "material", clickAt: 4420 },
     ];
 
-    let moveStart = 1700;
-    for (const { key, ms } of selectSequence) {
-      const k = key; /* capture */
-      const autoVal = OPTIONS.find((o) => o.key === k)!.autoSelect;
-      t(moveStart - 50, () => moveTo(chipRefs.current[k] ?? null, 0.55));
-      t(ms, () => {
+    for (const { key, clickAt } of seq) {
+      const k = key;
+      const val = OPTIONS.find((o) => o.key === k)!.autoSelect;
+      t(clickAt - 580, () => moveTo(chipRefs.current[k] ?? null, 0.5));
+      t(clickAt, () => {
         doClick(k);
-        setSelections((s) => ({ ...s, [k]: autoVal }));
+        setSelections((s) => ({ ...s, [k]: val }));
       });
-      moveStart = ms + 750;
     }
 
-    /* Move to Generate button */
-    t(5620, () => moveTo(generateBtnRef.current, 0.8));
-
-    /* Click Generate */
-    t(6500, () => {
+    /* Move to Generate, click */
+    t(5050, () => moveTo(generateBtnRef.current, 0.75));
+    t(5900, () => {
       doClick("generate");
-      setTimeout(() => setIsLoading(true), 200);
+      setTimeout(() => setIsLoading(true), 180);
     });
 
-    /* Show result */
-    t(8000, () => {
+    /* Result */
+    t(7400, () => {
       setIsLoading(false);
       setIsResult(true);
       setCursorVisible(false);
     });
 
     /* Loop */
-    t(14000, () => loopRef.current());
+    t(13500, () => loopRef.current());
   }, [cursorX, cursorY, doClick, moveTo]);
 
   useEffect(() => {
     loopRef.current = runSequence;
   }, [runSequence]);
 
-  /* Trigger on scroll into view */
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -310,17 +288,17 @@ export function LiveDemoSection() {
         </p>
       </div>
 
-      {/* ── Demo card ── */}
+      {/* Demo card — always landscape */}
       <div
         ref={containerRef}
         className="bg-background relative mx-auto max-w-3xl overflow-hidden rounded-2xl border shadow-xl"
       >
         {/* Browser chrome */}
-        <div className="bg-muted/40 flex items-center gap-2 border-b px-4 py-2.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
-          <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
-          <span className="h-2.5 w-2.5 rounded-full bg-green-400/80" />
-          <div className="bg-background ml-3 flex-1 rounded-md border px-3 py-0.5 text-center text-xs text-gray-400">
+        <div className="bg-muted/40 flex items-center gap-1.5 border-b px-3 py-2 sm:gap-2 sm:px-4 sm:py-2.5">
+          <span className="h-2 w-2 rounded-full bg-red-400/80 sm:h-2.5 sm:w-2.5" />
+          <span className="h-2 w-2 rounded-full bg-yellow-400/80 sm:h-2.5 sm:w-2.5" />
+          <span className="h-2 w-2 rounded-full bg-green-400/80 sm:h-2.5 sm:w-2.5" />
+          <div className="bg-background ml-2 flex-1 rounded-md border px-2 py-0.5 text-center text-[10px] text-gray-400 sm:ml-3 sm:px-3 sm:text-xs">
             app.interiordesigner.ai/render
           </div>
           <AnimatePresence>
@@ -330,61 +308,56 @@ export function LiveDemoSection() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
                 onClick={handleReplay}
-                className="text-muted-foreground hover:text-foreground ml-2 flex items-center gap-1 text-xs transition-colors"
+                className="text-muted-foreground hover:text-foreground ml-1 flex items-center gap-1 text-[10px] transition-colors sm:ml-2 sm:text-xs"
               >
-                <RotateCcw className="h-3 w-3" /> Replay
+                <RotateCcw className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> Replay
               </motion.button>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Main content */}
-        <div className="flex flex-col sm:flex-row">
-          {/* ── Left: image panel ── */}
-          <div className="relative h-52 w-full overflow-hidden sm:h-[300px] sm:w-[52%] sm:border-r">
+        {/* Always row — landscape on all screen sizes */}
+        <div className="flex flex-row">
+          {/* Left: image panel */}
+          <div className="relative h-40 w-[48%] shrink-0 overflow-hidden border-r sm:h-[280px] sm:w-[52%]">
             <AnimatePresence mode="wait">
               {!hasImage ? (
-                /* Upload dropzone */
                 <motion.div
                   key="dropzone"
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3"
                   exit={{
                     opacity: 0,
                     scale: 0.97,
                     transition: { duration: 0.2 },
                   }}
                 >
-                  <div className="bg-muted/60 rounded-xl p-4">
+                  <div className="bg-muted/60 rounded-xl p-2.5 sm:p-4">
                     <ImageIcon
-                      className="text-muted-foreground h-7 w-7"
+                      className="text-muted-foreground h-5 w-5 sm:h-7 sm:w-7"
                       strokeWidth={1.4}
                     />
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-medium">Drop your room photo</p>
-                    <p className="text-muted-foreground mt-0.5 text-xs">
-                      JPG · PNG · HEIC — up to 10 MB
-                    </p>
-                  </div>
-                  <div className="relative mt-1">
+                  <p className="text-center text-[10px] font-medium sm:text-sm">
+                    Drop your room photo
+                  </p>
+                  <div className="relative">
                     {ripples["upload"] && <Ripple />}
                     <button
                       ref={uploadBtnRef}
-                      className="bg-foreground text-background flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow"
+                      className="bg-foreground text-background flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[10px] font-semibold shadow sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
                     >
-                      <Upload className="h-3.5 w-3.5" />
+                      <Upload className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                       Upload Photo
                     </button>
                   </div>
                 </motion.div>
               ) : isResult ? (
-                /* After image */
                 <motion.div
                   key="after"
                   className="absolute inset-0"
                   initial={{ opacity: 0, scale: 1.06 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <Image
                     src={AFTER}
@@ -394,23 +367,22 @@ export function LiveDemoSection() {
                     sizes="500px"
                   />
                   <motion.div
-                    initial={{ opacity: 0, y: 5 }}
+                    initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.35 }}
-                    className="absolute top-2.5 left-2.5 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm"
+                    className="absolute top-2 left-2 flex items-center gap-1 rounded-full border border-white/20 bg-black/55 px-2 py-0.5 text-[9px] font-medium text-white backdrop-blur-sm sm:top-2.5 sm:left-2.5 sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-[11px]"
                   >
-                    <Sparkles className="h-3 w-3 text-yellow-300" />
-                    AI Render — Modern · Warm
+                    <Sparkles className="h-2.5 w-2.5 text-yellow-300" />
+                    AI Render
                   </motion.div>
                 </motion.div>
               ) : (
-                /* Before image */
                 <motion.div
                   key="before"
                   className="absolute inset-0"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.35 }}
+                  transition={{ duration: 0.32 }}
                 >
                   <Image
                     src={BEFORE}
@@ -420,33 +392,36 @@ export function LiveDemoSection() {
                     priority
                     sizes="500px"
                   />
-                  <div className="absolute top-2.5 left-2.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
-                    Original room
+                  <div className="absolute top-2 left-2 rounded-full border border-white/20 bg-black/55 px-2 py-0.5 text-[9px] font-medium text-white backdrop-blur-sm sm:top-2.5 sm:left-2.5 sm:px-2.5 sm:py-1 sm:text-[11px]">
+                    Original
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          {/* ── Right: options panel ── */}
-          <div className="flex flex-1 flex-col gap-3.5 overflow-y-auto p-4 sm:max-h-[300px] sm:p-4">
+          {/* Right: options panel */}
+          <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-2.5 sm:max-h-[280px] sm:gap-3 sm:p-4">
             {OPTIONS.map((group, gi) => {
               const sel = selections[group.key];
               return (
                 <motion.div
                   key={group.key}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: hasImage ? 1 : 0, x: hasImage ? 0 : 10 }}
+                  initial={{ opacity: 0, x: 8 }}
+                  animate={{
+                    opacity: hasImage ? 1 : 0,
+                    x: hasImage ? 0 : 8,
+                  }}
                   transition={{
-                    duration: 0.3,
-                    delay: hasImage ? gi * 0.06 : 0,
+                    duration: 0.28,
+                    delay: hasImage ? gi * 0.055 : 0,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  <p className="text-muted-foreground mb-1.5 text-[10px] font-semibold tracking-widest uppercase">
+                  <p className="text-muted-foreground mb-1 text-[8px] font-semibold tracking-widest uppercase sm:text-[9px]">
                     {group.label}
                   </p>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1">
                     {group.choices.map((choice) => (
                       <Chip
                         key={choice}
@@ -457,7 +432,7 @@ export function LiveDemoSection() {
                         }
                         refProp={
                           choice === group.autoSelect
-                            ? (el: HTMLButtonElement | null) => {
+                            ? (el) => {
                                 chipRefs.current[group.key] = el;
                               }
                             : undefined
@@ -469,7 +444,7 @@ export function LiveDemoSection() {
               );
             })}
 
-            {/* Summary pill */}
+            {/* All-set badge */}
             <AnimatePresence>
               {Object.keys(selections).length === OPTIONS.length &&
                 !isResult && (
@@ -477,38 +452,38 @@ export function LiveDemoSection() {
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="mt-auto flex items-center gap-1.5 rounded-lg border border-green-200 bg-green-50 px-2.5 py-1.5 text-[11px] text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-400"
+                    transition={{ duration: 0.22 }}
+                    className="mt-auto flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-2 py-1 text-[9px] text-green-700 sm:gap-1.5 sm:text-[11px] dark:border-green-800 dark:bg-green-950 dark:text-green-400"
                   >
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                    All options set — ready to generate
+                    Ready to generate
                   </motion.div>
                 )}
             </AnimatePresence>
           </div>
         </div>
 
-        {/* ── Generate button bar ── */}
-        <div className="border-t px-5 py-3">
-          <div className="relative flex items-center justify-between gap-4">
+        {/* Generate bar */}
+        <div className="border-t px-3 py-2.5 sm:px-5 sm:py-3">
+          <div className="flex items-center justify-between gap-3">
             {/* Progress dots */}
             <div className="flex items-center gap-1">
               {OPTIONS.map((o) => (
                 <motion.span
                   key={o.key}
                   animate={{
-                    scale: selections[o.key] ? 1 : 0.6,
+                    scale: selections[o.key] ? 1 : 0.55,
                     opacity: selections[o.key] ? 1 : 0.3,
-                    backgroundColor: selections[o.key]
-                      ? "var(--foreground)"
-                      : "var(--muted-foreground)",
                   }}
                   transition={{ type: "spring", stiffness: 500, damping: 28 }}
-                  className="inline-block h-1.5 w-1.5 rounded-full"
+                  className={cn(
+                    "inline-block h-1.5 w-1.5 rounded-full",
+                    selections[o.key] ? "bg-foreground" : "bg-muted-foreground"
+                  )}
                 />
               ))}
-              <span className="text-muted-foreground ml-2 text-[11px]">
-                {Object.keys(selections).length}/{OPTIONS.length} configured
+              <span className="text-muted-foreground ml-1.5 text-[9px] sm:ml-2 sm:text-[11px]">
+                {Object.keys(selections).length}/{OPTIONS.length}
               </span>
             </div>
 
@@ -519,12 +494,12 @@ export function LiveDemoSection() {
                 ref={generateBtnRef}
                 animate={
                   pressing && ripples["generate"]
-                    ? { scale: 0.92 }
+                    ? { scale: 0.91 }
                     : { scale: 1 }
                 }
                 transition={{ type: "spring", stiffness: 600, damping: 30 }}
                 className={cn(
-                  "relative flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow transition-colors",
+                  "relative flex items-center gap-1.5 rounded-xl px-3 py-2 text-[10px] font-semibold shadow transition-colors sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm",
                   isResult
                     ? "bg-green-600 text-white"
                     : "bg-foreground text-background"
@@ -536,22 +511,24 @@ export function LiveDemoSection() {
                       animate={{ rotate: 360 }}
                       transition={{
                         repeat: Infinity,
-                        duration: 0.75,
+                        duration: 0.7,
                         ease: "linear",
                       }}
-                      className="inline-block h-4 w-4 rounded-full border-2 border-current/25 border-t-current"
+                      className="inline-block h-3 w-3 rounded-full border-2 border-current/25 border-t-current sm:h-4 sm:w-4"
                     />
-                    Generating…
+                    <span className="hidden sm:inline">Generating…</span>
+                    <span className="sm:hidden">Generating</span>
                   </>
                 ) : isResult ? (
                   <>
-                    <Sparkles className="h-4 w-4" />
-                    Render complete!
+                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Render complete!</span>
+                    <span className="sm:hidden">Done!</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="h-4 w-4" />
-                    Generate Design
+                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                    Generate
                   </>
                 )}
               </motion.button>
@@ -559,17 +536,17 @@ export function LiveDemoSection() {
           </div>
         </div>
 
-        {/* ── Floating cursor ── */}
+        {/* Floating cursor */}
         <AnimatePresence>
           {cursorVisible && (
             <motion.div
               key="cursor"
               className="pointer-events-none absolute z-30"
               style={{ x: cursorX, y: cursorY }}
-              initial={{ opacity: 0, scale: 0.5 }}
+              initial={{ opacity: 0, scale: 0.4 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              exit={{ opacity: 0, scale: 0.4 }}
+              transition={{ duration: 0.16 }}
             >
               <CursorSVG pressing={pressing} />
             </motion.div>
@@ -578,10 +555,10 @@ export function LiveDemoSection() {
       </div>
 
       {/* Social proof */}
-      <div className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs">
-        <span>⚡ Average render time: 18 s</span>
+      <div className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
+        <span>⚡ Avg render: 18 s</span>
         <span>·</span>
-        <span>🎨 20+ design styles</span>
+        <span>🎨 20+ styles</span>
         <span>·</span>
         <span>📐 Layout preserved</span>
         <span>·</span>
