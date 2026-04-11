@@ -1,20 +1,42 @@
 "use client";
 
-import { Palette, Mail, Loader2, ArrowLeft } from "lucide-react";
-import { useState, useRef } from "react";
-import { SmokeyBackground } from "@/components/ui/login-form";
-import { OTPInput } from "@/components/ui/otp-input";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Palette, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
 
-function OTPForm() {
-  const [step, setStep] = useState<"email" | "otp">("email");
+const CanvasRevealEffect = dynamic(
+  () =>
+    import("@/components/ui/canvas-reveal").then((m) => ({
+      default: m.CanvasRevealEffect,
+    })),
+  { ssr: false, loading: () => null }
+);
+
+export default function SignInPage() {
   const [email, setEmail] = useState("");
+  const [step, setStep] = useState<"email" | "otp" | "success">("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [otpToken, setOtpToken] = useState("");
-  const [success, setSuccess] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [reverseCanvas, setReverseCanvas] = useState(false);
+  const [showCanvas, setShowCanvas] = useState(true);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const sendOTP = async () => {
+  useEffect(() => {
+    if (step === "email") emailRef.current?.focus();
+  }, [step]);
+
+  useEffect(() => {
+    if (step === "otp") setTimeout(() => codeRefs.current[0]?.focus(), 400);
+  }, [step]);
+
+  /* ── Send OTP ── */
+  const sendOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError("");
     if (!email.includes("@")) {
       setError("Enter a valid email address.");
@@ -36,6 +58,7 @@ function OTPForm() {
     setStep("otp");
   };
 
+  /* ── Verify OTP ── */
   const verifyOTP = async (enteredCode: string) => {
     setError("");
     setLoading(true);
@@ -50,144 +73,298 @@ function OTPForm() {
     setLoading(false);
     if (result?.error) {
       setError("Invalid or expired code. Try again.");
+      setCode(["", "", "", "", "", ""]);
+      setTimeout(() => codeRefs.current[0]?.focus(), 50);
       return;
     }
-    setSuccess(true);
-    window.location.href = result?.url ?? "/render";
+    setReverseCanvas(true);
+    setTimeout(() => setShowCanvas(false), 50);
+    setStep("success");
+    setTimeout(() => {
+      window.location.href = result?.url ?? "/render";
+    }, 1800);
   };
 
-  /* ── Email step ── */
-  if (step === "email") {
-    return (
-      <div className="space-y-4">
-        <div className="relative">
-          <input
-            ref={inputRef}
-            type="email"
-            id="email"
-            placeholder=" "
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendOTP()}
-            disabled={loading}
-            className="peer block w-full rounded-xl border border-gray-200 bg-white/70 px-4 pt-5 pb-2.5 text-sm text-gray-900 shadow-sm backdrop-blur-sm transition focus:border-violet-400 focus:ring-1 focus:ring-violet-400 focus:outline-none disabled:opacity-60"
+  /* ── Code input handlers ── */
+  const handleCodeChange = async (index: number, value: string) => {
+    if (value.length > 1) return;
+    const next = [...code];
+    next[index] = value.replace(/\D/, "");
+    setCode(next);
+    if (value && index < 5) codeRefs.current[index + 1]?.focus();
+    if (index === 5 && value && next.every((d) => d.length === 1)) {
+      await verifyOTP(next.join(""));
+    }
+  };
+
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      codeRefs.current[index - 1]?.focus();
+    }
+  };
+
+  /* ── Go back ── */
+  const goBack = () => {
+    setStep("email");
+    setOtpToken("");
+    setError("");
+    setCode(["", "", "", "", "", ""]);
+    setReverseCanvas(false);
+    setShowCanvas(true);
+  };
+
+  return (
+    <div className="relative flex min-h-screen w-full flex-col bg-black">
+      {/* ── WebGL dot matrix background ── */}
+      <div className="absolute inset-0 z-0">
+        {showCanvas && (
+          <CanvasRevealEffect
+            animationSpeed={3}
+            containerClassName="bg-black"
+            colors={[
+              [255, 255, 255],
+              [255, 255, 255],
+            ]}
+            dotSize={6}
+            reverse={false}
           />
-          <label
-            htmlFor="email"
-            className="absolute top-4 left-4 z-10 origin-[0] -translate-y-2 scale-75 text-xs font-medium text-gray-500 transition-all select-none peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-sm peer-focus:-translate-y-2 peer-focus:scale-75 peer-focus:text-violet-600"
-          >
-            Email address
-          </label>
-        </div>
-
-        {error && (
-          <p className="flex items-center gap-1.5 text-xs text-red-500">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
-            {error}
-          </p>
         )}
-
-        <button
-          onClick={sendOTP}
-          disabled={loading}
-          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-violet-200 transition-all duration-200 hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none disabled:opacity-60"
-        >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Mail className="h-4 w-4" />
-          )}
-          {loading ? "Sending…" : "Send sign-in code"}
-          {!loading && (
-            <ArrowLeft className="h-4 w-4 rotate-180 opacity-60 transition-transform group-hover:translate-x-0.5" />
-          )}
-        </button>
+        {reverseCanvas && (
+          <CanvasRevealEffect
+            animationSpeed={4}
+            containerClassName="bg-black"
+            colors={[
+              [255, 255, 255],
+              [255, 255, 255],
+            ]}
+            dotSize={6}
+            reverse={true}
+          />
+        )}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.82)_0%,transparent_72%)]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
       </div>
-    );
-  }
 
-  /* ── OTP step ── */
-  return (
-    <div className="space-y-4">
-      <OTPInput
-        email={email}
-        loading={loading}
-        error={error}
-        success={success}
-        onVerify={verifyOTP}
-        onResend={() => {
-          setStep("email");
-          setOtpToken("");
-          setError("");
-        }}
-      />
-      <button
-        onClick={() => {
-          setStep("email");
-          setOtpToken("");
-          setError("");
-        }}
-        className="flex w-full items-center justify-center gap-1.5 text-xs text-gray-400 transition-colors hover:text-gray-700"
-      >
-        <ArrowLeft className="h-3 w-3" /> Use a different email
-      </button>
-    </div>
-  );
-}
+      {/* ── Brand mark ── */}
+      <div className="relative z-10 flex items-center justify-center gap-2.5 pt-10">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-lg">
+          <Palette className="h-5 w-5 text-black" />
+        </div>
+        <span className="text-sm font-semibold tracking-wide text-white">
+          Interior Designer AI
+        </span>
+      </div>
 
-export default function SignInPage() {
-  return (
-    <main className="relative min-h-screen w-full overflow-hidden bg-gray-50">
-      {/* WebGL smokey background — soft violet on light white */}
-      <SmokeyBackground color="#7C3AED" className="opacity-[0.07]" />
+      {/* ── Main form ── */}
+      <div className="relative z-10 flex flex-1 items-center justify-center px-4 pb-16">
+        <div className="w-full max-w-sm">
+          <AnimatePresence mode="wait">
+            {/* Email step */}
+            {step === "email" && (
+              <motion.div
+                key="email"
+                initial={{ opacity: 0, x: -60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -60 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="space-y-7 text-center"
+              >
+                <div>
+                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                    Welcome back
+                  </h1>
+                  <p className="mt-1 text-white/50">
+                    Sign in to generate photorealistic renders
+                  </p>
+                </div>
 
-      {/* Subtle radial gradient overlay for depth */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(167,139,250,0.15)_0%,transparent_60%),radial-gradient(ellipse_at_bottom_right,rgba(139,92,246,0.1)_0%,transparent_60%)]" />
+                <form onSubmit={sendOTP} className="space-y-3">
+                  <div className="relative">
+                    <input
+                      ref={emailRef}
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={loading}
+                      className="w-full rounded-full border border-white/10 bg-white/5 px-5 py-3.5 text-center text-white backdrop-blur placeholder:text-white/30 focus:border-white/30 focus:outline-none disabled:opacity-50"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="absolute top-1/2 right-1.5 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      ) : (
+                        <span className="text-base leading-none">→</span>
+                      )}
+                    </button>
+                  </div>
+                  {error && <p className="text-sm text-red-400">{error}</p>}
+                </form>
 
-      {/* Content */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-sm space-y-6">
-          {/* Logo + title */}
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-100 bg-white shadow-lg shadow-violet-100">
-              <Palette className="h-7 w-7 text-violet-600" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-                Interior Designer AI
-              </h1>
-              <p className="mt-1 text-sm text-gray-500">
-                Sign in to generate photorealistic renders
-              </p>
-            </div>
-          </div>
+                <p className="text-xs text-white/30">
+                  By continuing you agree to our{" "}
+                  <Link
+                    href="#"
+                    className="underline transition-colors hover:text-white/50"
+                  >
+                    Terms
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="#"
+                    className="underline transition-colors hover:text-white/50"
+                  >
+                    Privacy Policy
+                  </Link>
+                </p>
+              </motion.div>
+            )}
 
-          {/* Card */}
-          <div className="space-y-6 rounded-2xl border border-gray-100 bg-white/80 p-8 shadow-xl shadow-gray-100 backdrop-blur-xl">
-            <div className="space-y-1 text-center">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Welcome back
-              </h2>
-              <p className="text-sm text-gray-500">
-                Enter your email to receive a one-time sign-in code
-              </p>
-            </div>
+            {/* OTP step */}
+            {step === "otp" && (
+              <motion.div
+                key="otp"
+                initial={{ opacity: 0, x: 60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 60 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="space-y-6 text-center"
+              >
+                <div>
+                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                    Check your inbox
+                  </h1>
+                  <p className="mt-1 text-white/50">
+                    Code sent to{" "}
+                    <span className="font-medium text-white/80">{email}</span>
+                  </p>
+                </div>
 
-            <OTPForm />
-          </div>
+                {/* Inline 6-box code input */}
+                <div className="rounded-full border border-white/10 bg-white/5 px-5 py-4 backdrop-blur">
+                  <div className="flex items-center justify-center">
+                    {code.map((digit, i) => (
+                      <div key={i} className="flex items-center">
+                        <div className="relative">
+                          <input
+                            ref={(el) => {
+                              codeRefs.current[i] = el;
+                            }}
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={1}
+                            value={digit}
+                            onChange={(e) =>
+                              handleCodeChange(i, e.target.value)
+                            }
+                            onKeyDown={(e) => handleKeyDown(i, e)}
+                            disabled={loading}
+                            className="w-9 appearance-none border-none bg-transparent text-center text-xl font-semibold text-white focus:outline-none disabled:opacity-40"
+                            style={{ caretColor: "transparent" }}
+                          />
+                          {!digit && (
+                            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                              <span className="text-xl text-white/20">·</span>
+                            </div>
+                          )}
+                        </div>
+                        {i < 5 && (
+                          <span className="text-lg text-white/15">|</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-          <p className="text-center text-xs text-gray-400">
-            By continuing, you agree to our{" "}
-            <a href="#" className="text-violet-500 hover:underline">
-              Terms
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-violet-500 hover:underline">
-              Privacy Policy
-            </a>
-          </p>
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-red-400"
+                  >
+                    {error}
+                  </motion.p>
+                )}
+
+                {loading && (
+                  <p className="animate-pulse text-sm text-white/40">
+                    Verifying…
+                  </p>
+                )}
+
+                <p
+                  onClick={goBack}
+                  className="cursor-pointer text-sm text-white/40 transition-colors hover:text-white/60"
+                >
+                  Resend code
+                </p>
+
+                <button
+                  onClick={goBack}
+                  className="flex w-full items-center justify-center gap-1.5 text-xs text-white/25 transition-colors hover:text-white/50"
+                >
+                  <ArrowLeft className="h-3 w-3" /> Use a different email
+                </button>
+              </motion.div>
+            )}
+
+            {/* Success step */}
+            {step === "success" && (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="space-y-6 text-center"
+              >
+                <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                  You&apos;re in!
+                </h1>
+                <motion.div
+                  initial={{ scale: 0.7, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    delay: 0.2,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                  className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,0.25)]"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8 text-black"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </motion.div>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="text-white/50"
+                >
+                  Redirecting to your workspace…
+                </motion.p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -176,8 +176,10 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
       return () => ctx.revert();
     }, []);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Tag = Component as any;
     return (
-      <Component
+      <Tag
         ref={(node: HTMLElement) => {
           (localRef as React.MutableRefObject<HTMLElement | null>).current =
             node;
@@ -191,7 +193,7 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
         {...props}
       >
         {children}
-      </Component>
+      </Tag>
     );
   }
 );
