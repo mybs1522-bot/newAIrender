@@ -330,10 +330,9 @@ export function CinematicFooter({
 
             <h2
               ref={headingRef}
-              className="footer-text-glow mb-4 text-center text-5xl font-black tracking-tighter md:text-8xl"
+              className="footer-text-glow mb-4 text-center text-3xl font-black tracking-tight md:text-5xl"
             >
-              High-quality architecture renders in 30 seconds.{" "}
-              <br className="hidden md:block" />
+              High-quality architecture renders in 30 seconds. <br />
               No GPU required.
             </h2>
             <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
