@@ -19,7 +19,6 @@ import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
 import { StatsDashboard } from "@/components/stats-dashboard";
 import { TrustedBySection } from "@/components/trusted-by-section";
-import { DownloadSection } from "@/components/download-section";
 
 const features = [
   {
@@ -278,8 +277,6 @@ export default function HomePage() {
           </section>
         </div>
       </div>
-
-      <DownloadSection />
 
       {/* ── How it works ─────────────────────────────────────── */}
       <div className="mx-auto w-full max-w-5xl px-6 py-16 lg:px-8">

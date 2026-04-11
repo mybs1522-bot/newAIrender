@@ -273,15 +273,14 @@ export function CinematicFooter({
       );
       gsap.fromTo(
         [headingRef.current, linksRef.current],
-        { y: 50, opacity: 0 },
+        { y: 30 },
         {
           y: 0,
-          opacity: 1,
           stagger: 0.15,
           ease: "power3.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
-            start: "top 40%",
+            start: "top 80%",
             end: "bottom bottom",
             scrub: 1,
           },
