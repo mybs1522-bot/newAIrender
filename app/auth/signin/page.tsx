@@ -127,7 +127,6 @@ export default function SignInPage() {
     }
   };
 
-  /* ── Go back ── */
   const goBack = () => {
     setStep("email");
     setOtpToken("");
@@ -138,8 +137,8 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-black">
-      {/* ── Loader screen ── */}
+    <div className="relative flex min-h-screen w-full flex-col bg-white">
+      {/* ── Loader screen (white bg) ── */}
       <AnimatePresence>
         {showLoader && (
           <motion.div
@@ -147,13 +146,13 @@ export default function SignInPage() {
             initial={{ opacity: 1 }}
             animate={{ opacity: loaderFading ? 0 : 1 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black"
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-white"
           >
-            <div className="mb-4 flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-lg">
-                <Palette className="h-5 w-5 text-black" />
+            <div className="mb-2 flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-900 shadow-md">
+                <Palette className="h-5 w-5 text-white" />
               </div>
-              <span className="text-sm font-semibold tracking-wide text-white">
+              <span className="text-sm font-semibold tracking-wide text-gray-900">
                 Interior Designer AI
               </span>
             </div>
@@ -167,43 +166,46 @@ export default function SignInPage() {
         )}
       </AnimatePresence>
 
-      {/* ── WebGL dot matrix background ── */}
+      {/* ── WebGL dot matrix background (black dots on white) ── */}
       <div className="absolute inset-0 z-0">
         {showCanvas && (
           <CanvasRevealEffect
             animationSpeed={3}
-            containerClassName="bg-black"
+            containerClassName="bg-white"
             colors={[
-              [255, 255, 255],
-              [255, 255, 255],
+              [0, 0, 0],
+              [0, 0, 0],
             ]}
-            dotSize={6}
+            dotSize={5}
+            showGradient={false}
             reverse={false}
           />
         )}
         {reverseCanvas && (
           <CanvasRevealEffect
             animationSpeed={4}
-            containerClassName="bg-black"
+            containerClassName="bg-white"
             colors={[
-              [255, 255, 255],
-              [255, 255, 255],
+              [0, 0, 0],
+              [0, 0, 0],
             ]}
-            dotSize={6}
+            dotSize={5}
+            showGradient={false}
             reverse={true}
           />
         )}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.82)_0%,transparent_72%)]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
+        {/* White radial vignette — keeps centre clean */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.88)_0%,transparent_72%)]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
       </div>
 
       {/* ── Brand mark ── */}
       <div className="relative z-10 flex items-center justify-center gap-2.5 pt-10">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-lg">
-          <Palette className="h-5 w-5 text-black" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-900 shadow-md">
+          <Palette className="h-5 w-5 text-white" />
         </div>
-        <span className="text-sm font-semibold tracking-wide text-white">
+        <span className="text-sm font-semibold tracking-wide text-gray-900">
           Interior Designer AI
         </span>
       </div>
@@ -223,10 +225,10 @@ export default function SignInPage() {
                 className="space-y-7 text-center"
               >
                 <div>
-                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-gray-900">
                     Welcome back
                   </h1>
-                  <p className="mt-1 text-white/50">
+                  <p className="mt-1 text-gray-500">
                     Sign in to generate photorealistic renders
                   </p>
                 </div>
@@ -240,13 +242,13 @@ export default function SignInPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading}
-                      className="w-full rounded-full border border-white/10 bg-white/5 px-5 py-3.5 text-center text-white backdrop-blur placeholder:text-white/30 focus:border-white/30 focus:outline-none disabled:opacity-50"
+                      className="w-full rounded-full border border-gray-200 bg-white/70 px-5 py-3.5 text-center text-gray-900 shadow-sm backdrop-blur placeholder:text-gray-400 focus:border-gray-400 focus:outline-none disabled:opacity-50"
                       required
                     />
                     <button
                       type="submit"
                       disabled={loading}
-                      className="absolute top-1/2 right-1.5 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 disabled:opacity-50"
+                      className="absolute top-1/2 right-1.5 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-gray-900 text-white transition-colors hover:bg-gray-700 disabled:opacity-50"
                     >
                       {loading ? (
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -255,21 +257,21 @@ export default function SignInPage() {
                       )}
                     </button>
                   </div>
-                  {error && <p className="text-sm text-red-400">{error}</p>}
+                  {error && <p className="text-sm text-red-500">{error}</p>}
                 </form>
 
-                <p className="text-xs text-white/30">
+                <p className="text-xs text-gray-400">
                   By continuing you agree to our{" "}
                   <Link
                     href="#"
-                    className="underline transition-colors hover:text-white/50"
+                    className="underline transition-colors hover:text-gray-700"
                   >
                     Terms
                   </Link>{" "}
                   and{" "}
                   <Link
                     href="#"
-                    className="underline transition-colors hover:text-white/50"
+                    className="underline transition-colors hover:text-gray-700"
                   >
                     Privacy Policy
                   </Link>
@@ -288,17 +290,17 @@ export default function SignInPage() {
                 className="space-y-6 text-center"
               >
                 <div>
-                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                  <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-gray-900">
                     Check your inbox
                   </h1>
-                  <p className="mt-1 text-white/50">
+                  <p className="mt-1 text-gray-500">
                     Code sent to{" "}
-                    <span className="font-medium text-white/80">{email}</span>
+                    <span className="font-medium text-gray-800">{email}</span>
                   </p>
                 </div>
 
                 {/* Inline 6-box code input */}
-                <div className="rounded-full border border-white/10 bg-white/5 px-5 py-4 backdrop-blur">
+                <div className="rounded-full border border-gray-200 bg-white/70 px-5 py-4 shadow-sm backdrop-blur">
                   <div className="flex items-center justify-center">
                     {code.map((digit, i) => (
                       <div key={i} className="flex items-center">
@@ -316,17 +318,17 @@ export default function SignInPage() {
                             }
                             onKeyDown={(e) => handleKeyDown(i, e)}
                             disabled={loading}
-                            className="w-9 appearance-none border-none bg-transparent text-center text-xl font-semibold text-white focus:outline-none disabled:opacity-40"
+                            className="w-9 appearance-none border-none bg-transparent text-center text-xl font-semibold text-gray-900 focus:outline-none disabled:opacity-40"
                             style={{ caretColor: "transparent" }}
                           />
                           {!digit && (
                             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                              <span className="text-xl text-white/20">·</span>
+                              <span className="text-xl text-gray-300">·</span>
                             </div>
                           )}
                         </div>
                         {i < 5 && (
-                          <span className="text-lg text-white/15">|</span>
+                          <span className="text-lg text-gray-200">|</span>
                         )}
                       </div>
                     ))}
@@ -337,28 +339,28 @@ export default function SignInPage() {
                   <motion.p
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-sm text-red-400"
+                    className="text-sm text-red-500"
                   >
                     {error}
                   </motion.p>
                 )}
 
                 {loading && (
-                  <p className="animate-pulse text-sm text-white/40">
+                  <p className="animate-pulse text-sm text-gray-400">
                     Verifying…
                   </p>
                 )}
 
                 <p
                   onClick={goBack}
-                  className="cursor-pointer text-sm text-white/40 transition-colors hover:text-white/60"
+                  className="cursor-pointer text-sm text-gray-400 transition-colors hover:text-gray-700"
                 >
                   Resend code
                 </p>
 
                 <button
                   onClick={goBack}
-                  className="flex w-full items-center justify-center gap-1.5 text-xs text-white/25 transition-colors hover:text-white/50"
+                  className="flex w-full items-center justify-center gap-1.5 text-xs text-gray-300 transition-colors hover:text-gray-600"
                 >
                   <ArrowLeft className="h-3 w-3" /> Use a different email
                 </button>
@@ -374,7 +376,7 @@ export default function SignInPage() {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="space-y-6 text-center"
               >
-                <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-white">
+                <h1 className="text-[2.2rem] leading-tight font-bold tracking-tight text-gray-900">
                   You&apos;re in!
                 </h1>
                 <motion.div
@@ -386,11 +388,11 @@ export default function SignInPage() {
                     stiffness: 300,
                     damping: 20,
                   }}
-                  className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,0.25)]"
+                  className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-900 shadow-lg"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 text-black"
+                    className="h-8 w-8 text-white"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -405,7 +407,7 @@ export default function SignInPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="text-white/50"
+                  className="text-gray-500"
                 >
                   Redirecting to your workspace…
                 </motion.p>
