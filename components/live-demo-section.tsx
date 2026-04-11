@@ -328,181 +328,183 @@ export function LiveDemoSection() {
           </AnimatePresence>
         </div>
 
-        {/* Phase content */}
-        <AnimatePresence mode="wait">
-          {/* ── UPLOAD ── */}
-          {phase === "upload" && (
-            <motion.div
-              key="upload"
-              className="flex flex-col items-center justify-center gap-4 px-6 py-14"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.25 }}
-            >
-              <div className="bg-muted/60 rounded-2xl p-5">
-                <ImageIcon
-                  className="text-muted-foreground h-10 w-10"
-                  strokeWidth={1.3}
-                />
-              </div>
-              <div className="text-center">
-                <p className="text-base font-semibold">
-                  Drop your room photo here
-                </p>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  JPG · PNG · HEIC — up to 10 MB
-                </p>
-              </div>
-              <div className="relative mt-1">
-                {ripples["upload"] && <Ripple />}
-                <button
-                  ref={uploadBtnRef}
-                  className="bg-foreground text-background flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-md"
-                >
-                  <Upload className="h-4 w-4" />
-                  Upload Photo
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── IMAGE FLASH ── */}
-          {phase === "image-in" && (
-            <motion.div
-              key="image-in"
-              className="relative h-60 w-full sm:h-80"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
-            >
-              <Image
-                src={BEFORE}
-                alt="Uploaded room"
-                fill
-                className="object-cover"
-                priority
-                sizes="640px"
-              />
+        {/* Phase content — fixed height so card never resizes */}
+        <div className="relative h-[340px] sm:h-[380px]">
+          <AnimatePresence mode="wait">
+            {/* ── UPLOAD ── */}
+            {phase === "upload" && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.85, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{
-                  delay: 0.2,
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 22,
-                }}
-                className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
+                key="upload"
+                className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.25 }}
               >
-                <CheckCircle2 className="h-4 w-4 text-green-400" />
-                Photo uploaded successfully
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* ── SELECTIONS ── */}
-          {phase === "selections" && (
-            <motion.div
-              key="selections"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="px-5 py-5 sm:px-6 sm:py-6"
-            >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {OPTIONS.map((group, gi) => {
-                  const sel = selections[group.key];
-                  return (
-                    <motion.div
-                      key={group.key}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        delay: gi * 0.07,
-                        duration: 0.28,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                    >
-                      <p className="text-muted-foreground mb-2 text-[10px] font-semibold tracking-widest uppercase">
-                        {group.label}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {group.choices.map((choice) => (
-                          <Chip
-                            key={choice}
-                            label={choice}
-                            selected={sel === choice}
-                            ripple={
-                              !!(
-                                ripples[group.key] &&
-                                choice === group.autoSelect
-                              )
-                            }
-                            refProp={
-                              choice === group.autoSelect
-                                ? (el) => {
-                                    chipRefs.current[group.key] = el;
-                                  }
-                                : undefined
-                            }
-                          />
-                        ))}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* All-set pill */}
-              <AnimatePresence>
-                {selCount === OPTIONS.length && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.22 }}
-                    className="mt-4 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 text-xs text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-400"
+                <div className="bg-muted/60 rounded-2xl p-5">
+                  <ImageIcon
+                    className="text-muted-foreground h-10 w-10"
+                    strokeWidth={1.3}
+                  />
+                </div>
+                <div className="text-center">
+                  <p className="text-base font-semibold">
+                    Drop your room photo here
+                  </p>
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    JPG · PNG · HEIC — up to 10 MB
+                  </p>
+                </div>
+                <div className="relative mt-1">
+                  {ripples["upload"] && <Ripple />}
+                  <button
+                    ref={uploadBtnRef}
+                    className="bg-foreground text-background flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-md"
                   >
-                    <CheckCircle2 className="h-3.5 w-3.5" />
-                    All options configured — ready to generate
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
-
-          {/* ── RESULT ── */}
-          {phase === "result" && (
-            <motion.div
-              key="result"
-              className="relative h-60 w-full sm:h-80"
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Image
-                src={AFTER}
-                alt="AI render"
-                fill
-                className="object-cover"
-                sizes="640px"
-              />
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
-              >
-                <Sparkles className="h-3 w-3 text-yellow-300" />
-                AI Render — Modern · Warm
+                    <Upload className="h-4 w-4" />
+                    Upload Photo
+                  </button>
+                </div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+
+            {/* ── IMAGE FLASH ── */}
+            {phase === "image-in" && (
+              <motion.div
+                key="image-in"
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+              >
+                <Image
+                  src={BEFORE}
+                  alt="Uploaded room"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="640px"
+                />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{
+                    delay: 0.2,
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 22,
+                  }}
+                  className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
+                >
+                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                  Photo uploaded successfully
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* ── SELECTIONS ── */}
+            {phase === "selections" && (
+              <motion.div
+                key="selections"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 overflow-y-auto px-5 py-4 sm:px-6 sm:py-5"
+              >
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {OPTIONS.map((group, gi) => {
+                    const sel = selections[group.key];
+                    return (
+                      <motion.div
+                        key={group.key}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: gi * 0.07,
+                          duration: 0.28,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      >
+                        <p className="text-muted-foreground mb-2 text-[10px] font-semibold tracking-widest uppercase">
+                          {group.label}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {group.choices.map((choice) => (
+                            <Chip
+                              key={choice}
+                              label={choice}
+                              selected={sel === choice}
+                              ripple={
+                                !!(
+                                  ripples[group.key] &&
+                                  choice === group.autoSelect
+                                )
+                              }
+                              refProp={
+                                choice === group.autoSelect
+                                  ? (el) => {
+                                      chipRefs.current[group.key] = el;
+                                    }
+                                  : undefined
+                              }
+                            />
+                          ))}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* All-set pill */}
+                <AnimatePresence>
+                  {selCount === OPTIONS.length && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.22 }}
+                      className="mt-4 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 text-xs text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-400"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      All options configured — ready to generate
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+
+            {/* ── RESULT ── */}
+            {phase === "result" && (
+              <motion.div
+                key="result"
+                className="absolute inset-0"
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Image
+                  src={AFTER}
+                  alt="AI render"
+                  fill
+                  className="object-cover"
+                  sizes="640px"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
+                >
+                  <Sparkles className="h-3 w-3 text-yellow-300" />
+                  AI Render — Modern · Warm
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* ── Bottom bar — always visible ── */}
         <div className="border-t px-5 py-3">
