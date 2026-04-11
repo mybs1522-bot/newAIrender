@@ -132,19 +132,19 @@ export default function HomePage() {
           <section className="flex flex-col items-center gap-6 text-center">
             <div className="bg-background text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              Powered by Google Nano Banana Pro
+              No GPU required · Runs locally in 30 s
             </div>
 
-            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              Redesign any room with{" "}
-              <span className="text-muted-foreground">
-                artificial intelligence
-              </span>
+            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              Stop paying for{" "}
+              <span className="text-muted-foreground">expensive renders.</span>{" "}
+              Get them in 30 seconds — free.
             </h1>
 
-            <p className="text-muted-foreground max-w-lg text-base leading-7">
-              Upload a photo, configure your design style, and receive a
-              photorealistic render — indistinguishable from a real photograph.
+            <p className="text-muted-foreground max-w-xl text-base leading-7">
+              No costly GPU. No bloated rendering software. Avada runs entirely
+              on your laptop and transforms any room photo into a photorealistic
+              AI render — indistinguishable from the real thing.
             </p>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row">
@@ -166,11 +166,13 @@ export default function HomePage() {
             </div>
 
             <div className="text-muted-foreground flex flex-wrap justify-center gap-x-8 gap-y-2 pt-2 text-sm">
+              <span>🖥️ Runs 100% locally</span>
+              <span>·</span>
+              <span>⚡ Renders in &lt; 30 s</span>
+              <span>·</span>
+              <span>💸 No subscription needed</span>
+              <span>·</span>
               <span>20+ design styles</span>
-              <span>·</span>
-              <span>Results in &lt; 30 seconds</span>
-              <span>·</span>
-              <span>100% layout preserved</span>
             </div>
           </section>
 
