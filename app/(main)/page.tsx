@@ -198,6 +198,9 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* ── Download the App ───────────────────────────── */}
+          <DownloadSection />
+
           {/* ── Stats dashboard ───────────────────────────────── */}
           <StatsDashboard />
 
@@ -315,7 +318,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      <DownloadSection />
       <CinematicFooter windowsHref="#" macHref="#" />
     </>
   );
