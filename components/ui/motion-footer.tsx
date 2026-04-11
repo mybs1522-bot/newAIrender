@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { Lock } from "lucide-react";
+import { LiveDemoSection } from "@/components/live-demo-section";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -295,10 +296,10 @@ export function CinematicFooter({
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       <div
         ref={wrapperRef}
-        className="relative h-screen w-full"
+        className="relative w-full"
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
-        <footer className="bg-background text-foreground cinematic-footer-wrapper fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden">
+        <footer className="bg-background text-foreground cinematic-footer-wrapper flex w-full flex-col justify-between overflow-hidden">
           {/* Aurora + grid */}
           <div className="footer-aurora animate-footer-breathe pointer-events-none absolute top-1/2 left-1/2 z-0 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-[50%] blur-[80px]" />
           <div className="footer-bg-grid pointer-events-none absolute inset-0 z-0" />
@@ -333,11 +334,18 @@ export function CinematicFooter({
               ref={headingRef}
               className="footer-text-glow mb-4 text-center text-5xl font-black tracking-tighter md:text-8xl"
             >
-              High-quality architecture renders in 30 seconds. No GPU required.
+              High-quality architecture renders in 30 seconds.{" "}
+              <br className="hidden md:block" />
+              No GPU required.
             </h2>
             <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
               Native desktop experience · offline setup · cloud AI generation
             </p>
+
+            {/* Demo video */}
+            <div className="mb-8 w-full max-w-3xl">
+              <LiveDemoSection />
+            </div>
 
             <div
               ref={linksRef}
