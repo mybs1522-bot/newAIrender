@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GoogleAuth } from "@/components/google-auth";
 import { CinematicFooter } from "@/components/ui/motion-footer";
+import { LiveDemoSection } from "@/components/live-demo-section";
 
 const features = [
   {
@@ -171,6 +172,9 @@ export default function HomePage() {
               <span>100% layout preserved</span>
             </div>
           </section>
+
+          {/* ── Live demo ─────────────────────────────────────── */}
+          <LiveDemoSection />
 
           {/* ── Features bento ─────────────────────────────────── */}
           <section id="features">
