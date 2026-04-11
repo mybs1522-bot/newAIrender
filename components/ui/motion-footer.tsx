@@ -325,7 +325,7 @@ export function CinematicFooter({
               ref={headingRef}
               className="footer-text-glow mb-4 text-center text-5xl font-black tracking-tighter md:text-8xl"
             >
-              Download the App
+              High-quality architecture renders in 30 seconds. No GPU required.
             </h2>
             <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
               Native desktop experience · offline setup · cloud AI generation
