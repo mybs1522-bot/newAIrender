@@ -1,22 +1,18 @@
 "use client";
 
-import { Palette, Mail, Loader2, CheckCircle2, ArrowLeft } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Palette, Mail, Loader2, ArrowLeft } from "lucide-react";
+import { useState, useRef } from "react";
 import { SmokeyBackground } from "@/components/ui/login-form";
+import { OTPInput } from "@/components/ui/otp-input";
 
 function OTPForm() {
   const [step, setStep] = useState<"email" | "otp">("email");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [otpToken, setOtpToken] = useState("");
   const [success, setSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [step]);
 
   const sendOTP = async () => {
     setError("");
@@ -40,17 +36,13 @@ function OTPForm() {
     setStep("otp");
   };
 
-  const verifyOTP = async () => {
+  const verifyOTP = async (enteredCode: string) => {
     setError("");
-    if (code.length < 6) {
-      setError("Enter the 6-digit code from your email.");
-      return;
-    }
     setLoading(true);
     const { signIn } = await import("next-auth/react");
     const result = await signIn("otp", {
       email,
-      code,
+      code: enteredCode,
       token: otpToken,
       redirect: false,
       callbackUrl: "/render",
@@ -63,16 +55,6 @@ function OTPForm() {
     setSuccess(true);
     window.location.href = result?.url ?? "/render";
   };
-
-  /* ── Success state ── */
-  if (success) {
-    return (
-      <div className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-emerald-600">
-        <CheckCircle2 className="h-4 w-4" />
-        Signed in — redirecting…
-      </div>
-    );
-  }
 
   /* ── Email step ── */
   if (step === "email") {
@@ -127,56 +109,21 @@ function OTPForm() {
   /* ── OTP step ── */
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 text-center text-sm text-violet-700">
-        Code sent to <span className="font-semibold">{email}</span>
-      </div>
-
-      <div className="relative">
-        <input
-          ref={inputRef}
-          type="text"
-          id="otp"
-          inputMode="numeric"
-          placeholder=" "
-          maxLength={6}
-          value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-          onKeyDown={(e) => e.key === "Enter" && verifyOTP()}
-          disabled={loading}
-          className="peer block w-full rounded-xl border border-gray-200 bg-white/70 px-4 pt-5 pb-2.5 text-center font-mono text-2xl tracking-[0.5em] text-gray-900 shadow-sm backdrop-blur-sm transition focus:border-violet-400 focus:ring-1 focus:ring-violet-400 focus:outline-none disabled:opacity-60"
-        />
-        <label
-          htmlFor="otp"
-          className="absolute top-4 left-4 z-10 origin-[0] -translate-y-2 scale-75 text-xs font-medium text-gray-500 transition-all select-none peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-sm peer-focus:-translate-y-2 peer-focus:scale-75 peer-focus:text-violet-600"
-        >
-          6-digit code
-        </label>
-      </div>
-
-      {error && (
-        <p className="flex items-center gap-1.5 text-xs text-red-500">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
-          {error}
-        </p>
-      )}
-
-      <button
-        onClick={verifyOTP}
-        disabled={loading || code.length < 6}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-violet-200 transition-all duration-200 hover:bg-violet-700 focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:outline-none disabled:opacity-40"
-      >
-        {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <CheckCircle2 className="h-4 w-4" />
-        )}
-        {loading ? "Verifying…" : "Verify & sign in"}
-      </button>
-
+      <OTPInput
+        email={email}
+        loading={loading}
+        error={error}
+        success={success}
+        onVerify={verifyOTP}
+        onResend={() => {
+          setStep("email");
+          setOtpToken("");
+          setError("");
+        }}
+      />
       <button
         onClick={() => {
           setStep("email");
-          setCode("");
           setOtpToken("");
           setError("");
         }}
