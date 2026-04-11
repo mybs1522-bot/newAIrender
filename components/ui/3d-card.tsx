@@ -61,7 +61,7 @@ const PhotoCard = ({
       </div>
       <div className="flex h-[18%] items-center justify-center">
         <p className="text-muted-foreground truncate px-1 text-center text-[10px] font-medium">
-          AI Interior Design
+          {label === "After" ? "Render" : "Design"}
         </p>
       </div>
     </div>
