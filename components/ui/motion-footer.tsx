@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { LiveDemoSection } from "@/components/live-demo-section";
+import { DownloadPricingModal } from "@/components/ui/download-pricing-modal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -290,9 +291,24 @@ export function CinematicFooter({
     return () => ctx.revert();
   }, []);
 
+  const [pricingOpen, setPricingOpen] = useState(false);
+  const [platform, setPlatform] = useState<"windows" | "mac">("windows");
+
+  function openPricing(p: "windows" | "mac") {
+    setPlatform(p);
+    setPricingOpen(true);
+  }
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
+      <DownloadPricingModal
+        open={pricingOpen}
+        onOpenChange={setPricingOpen}
+        platform={platform}
+        windowsHref={windowsHref}
+        macHref={macHref}
+      />
       <div
         ref={wrapperRef}
         className="relative w-full"
@@ -346,8 +362,8 @@ export function CinematicFooter({
 
             <div ref={linksRef} className="flex flex-wrap justify-center gap-4">
               <MagneticButton
-                as="a"
-                href={windowsHref}
+                as="button"
+                onClick={() => openPricing("windows")}
                 className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base lg:gap-5 lg:px-10 lg:py-6 lg:text-lg"
               >
                 <WindowsIcon />
@@ -363,8 +379,8 @@ export function CinematicFooter({
               </MagneticButton>
 
               <MagneticButton
-                as="a"
-                href={macHref}
+                as="button"
+                onClick={() => openPricing("mac")}
                 className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base lg:gap-5 lg:px-10 lg:py-6 lg:text-lg"
               >
                 <AppleIcon />
