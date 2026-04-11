@@ -128,6 +128,9 @@ export default function HomePage() {
           </div>
         </nav>
 
+        {/* ── Download the App (top) ───────────────────────── */}
+        <CinematicFooter windowsHref="#" macHref="#" />
+
         <div className="mx-auto w-full max-w-5xl space-y-16 px-6 py-16 pb-24 lg:px-8">
           {/* ── Hero ───────────────────────────────────────────── */}
           <section className="flex flex-col items-center gap-6 text-center">
@@ -315,8 +318,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-
-      <CinematicFooter windowsHref="#" macHref="#" />
     </>
   );
 }
