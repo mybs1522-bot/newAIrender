@@ -10,21 +10,9 @@ export function StatsDashboard() {
     <div className="flex justify-center">
       <MarketingDashboard
         title="Platform at a Glance"
-        teamActivities={{
-          totalHours: 24.8,
-          stats: [
-            { label: "Bedroom", value: 38, color: "bg-green-400" },
-            { label: "Living", value: 28, color: "bg-lime-300" },
-            { label: "Kitchen", value: 20, color: "bg-yellow-300" },
-            {
-              label: "Office",
-              value: 14,
-              color: "bg-slate-400 dark:bg-slate-600",
-            },
-          ],
-        }}
         team={{
-          memberCount: 3200,
+          memberCount: 32550,
+          label: "Downloads",
           members: [
             {
               id: "1",

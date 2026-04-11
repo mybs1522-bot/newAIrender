@@ -22,13 +22,14 @@ interface TeamMember {
 
 interface MarketingDashboardProps {
   title?: string;
-  teamActivities: {
+  teamActivities?: {
     totalHours: number;
     stats: ActivityStat[];
   };
   team: {
     memberCount: number;
     members: TeamMember[];
+    label?: string;
   };
   cta: {
     text: string;
@@ -39,16 +40,26 @@ interface MarketingDashboardProps {
   className?: string;
 }
 
-const AnimatedNumber = ({ value }: { value: number }) => {
+const AnimatedNumber = ({
+  value,
+  integer = false,
+}: {
+  value: number;
+  integer?: boolean;
+}) => {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest * 10) / 10);
+  const display = useTransform(count, (latest) =>
+    integer
+      ? Math.round(latest).toLocaleString()
+      : String(Math.round(latest * 10) / 10)
+  );
 
   React.useEffect(() => {
     const controls = animate(count, value, { duration: 1.5, ease: "easeOut" });
     return controls.stop;
   }, [value, count]);
 
-  return <motion.span>{rounded}</motion.span>;
+  return <motion.span>{display}</motion.span>;
 };
 
 export const MarketingDashboard = React.forwardRef<
@@ -66,6 +77,7 @@ export const MarketingDashboard = React.forwardRef<
     },
     ref
   ) => {
+    const teamLabel = team.label ?? "Team";
     const containerVariants = {
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.1 } },
@@ -108,51 +120,63 @@ export const MarketingDashboard = React.forwardRef<
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {/* Team Activities Card */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.03, y: -5 }}
-            transition={hoverTransition}
-          >
-            <Card className="h-full overflow-hidden rounded-xl p-4">
-              <CardContent className="p-2">
-                <div className="mb-4 flex items-center justify-between">
-                  <p className="text-muted-foreground font-medium">
-                    Renders Created
-                  </p>
-                  <Clock className="text-muted-foreground h-5 w-5" />
-                </div>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold">
-                    <AnimatedNumber value={teamActivities.totalHours} />
-                  </span>
-                  <span className="text-muted-foreground ml-1">k renders</span>
-                </div>
-                <div className="bg-muted mb-2 flex h-2 w-full overflow-hidden rounded-full">
-                  {teamActivities.stats.map((stat, index) => (
-                    <motion.div
-                      key={index}
-                      className={cn("h-full", stat.color)}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${stat.value}%` }}
-                      transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                    />
-                  ))}
-                </div>
-                <div className="text-muted-foreground flex items-center justify-between text-xs">
-                  {teamActivities.stats.map((stat) => (
-                    <div key={stat.label} className="flex items-center gap-1.5">
-                      <span
-                        className={cn("h-2 w-2 rounded-full", stat.color)}
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-4",
+            teamActivities && "md:grid-cols-2"
+          )}
+        >
+          {/* Team Activities Card — only rendered when data provided */}
+          {teamActivities && (
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ scale: 1.03, y: -5 }}
+              transition={hoverTransition}
+            >
+              <Card className="h-full overflow-hidden rounded-xl p-4">
+                <CardContent className="p-2">
+                  <div className="mb-4 flex items-center justify-between">
+                    <p className="text-muted-foreground font-medium">
+                      Renders Created
+                    </p>
+                    <Clock className="text-muted-foreground h-5 w-5" />
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold">
+                      <AnimatedNumber value={teamActivities.totalHours} />
+                    </span>
+                    <span className="text-muted-foreground ml-1">
+                      k renders
+                    </span>
+                  </div>
+                  <div className="bg-muted mb-2 flex h-2 w-full overflow-hidden rounded-full">
+                    {teamActivities.stats.map((stat, index) => (
+                      <motion.div
+                        key={index}
+                        className={cn("h-full", stat.color)}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${stat.value}%` }}
+                        transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
                       />
-                      <span>{stat.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                    ))}
+                  </div>
+                  <div className="text-muted-foreground flex items-center justify-between text-xs">
+                    {teamActivities.stats.map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="flex items-center gap-1.5"
+                      >
+                        <span
+                          className={cn("h-2 w-2 rounded-full", stat.color)}
+                        />
+                        <span>{stat.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
 
           {/* Team Members Card */}
           <motion.div
@@ -164,13 +188,13 @@ export const MarketingDashboard = React.forwardRef<
               <CardContent className="p-2">
                 <div className="mb-4 flex items-center justify-between">
                   <p className="font-medium text-lime-900 dark:text-lime-200">
-                    Designers
+                    {teamLabel}
                   </p>
                   <Users className="h-5 w-5 text-lime-900 dark:text-lime-200" />
                 </div>
                 <div className="mb-6">
                   <span className="text-4xl font-bold text-lime-950 dark:text-lime-50">
-                    <AnimatedNumber value={team.memberCount} />
+                    <AnimatedNumber value={team.memberCount} integer />
                   </span>
                   <span className="ml-1 text-lime-800 dark:text-lime-300">
                     users
