@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Palette, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import OnboardCard from "@/components/ui/onboard-card";
 
 const CanvasRevealEffect = dynamic(
   () =>
@@ -14,7 +15,11 @@ const CanvasRevealEffect = dynamic(
   { ssr: false, loading: () => null }
 );
 
+const LOADER_DURATION = 3000;
+
 export default function SignInPage() {
+  const [showLoader, setShowLoader] = useState(true);
+  const [loaderFading, setLoaderFading] = useState(false);
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"email" | "otp" | "success">("email");
   const [loading, setLoading] = useState(false);
@@ -25,6 +30,22 @@ export default function SignInPage() {
   const [showCanvas, setShowCanvas] = useState(true);
   const emailRef = useRef<HTMLInputElement>(null);
   const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  /* ── Loader timing ── */
+  useEffect(() => {
+    const fadeTimer = setTimeout(
+      () => setLoaderFading(true),
+      LOADER_DURATION + 400
+    );
+    const hideTimer = setTimeout(
+      () => setShowLoader(false),
+      LOADER_DURATION + 900
+    );
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
 
   useEffect(() => {
     if (step === "email") emailRef.current?.focus();
@@ -118,6 +139,34 @@ export default function SignInPage() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-black">
+      {/* ── Loader screen ── */}
+      <AnimatePresence>
+        {showLoader && (
+          <motion.div
+            key="loader"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: loaderFading ? 0 : 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-black"
+          >
+            <div className="mb-4 flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-lg">
+                <Palette className="h-5 w-5 text-black" />
+              </div>
+              <span className="text-sm font-semibold tracking-wide text-white">
+                Interior Designer AI
+              </span>
+            </div>
+            <OnboardCard
+              duration={LOADER_DURATION}
+              step1="Loading Assets"
+              step2="Preparing Workspace"
+              step3="Almost Ready"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── WebGL dot matrix background ── */}
       <div className="absolute inset-0 z-0">
         {showCanvas && (
