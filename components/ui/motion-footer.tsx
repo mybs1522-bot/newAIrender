@@ -320,7 +320,7 @@ export function CinematicFooter({
           </div>
 
           {/* Main content */}
-          <div className="relative z-10 mx-auto mt-36 flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-16">
+          <div className="relative z-10 mt-36 flex w-full flex-1 flex-col items-center justify-center px-6 pb-16 lg:px-16 xl:px-24">
             <div className="footer-glass-pill mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
               <span className="text-muted-foreground font-medium">

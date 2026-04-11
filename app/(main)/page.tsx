@@ -138,7 +138,7 @@ export default function HomePage() {
         {/* ── Download the App (top) ───────────────────────── */}
         <CinematicFooter windowsHref="#" macHref="#" />
 
-        <div className="mx-auto w-full max-w-5xl space-y-16 px-6 py-16 pb-24 lg:px-8">
+        <div className="w-full space-y-16 px-6 py-16 pb-24 lg:px-16 xl:px-24">
           {/* ── Before / After cards ─────────────────────────── */}
           <div className="flex justify-center py-4">
             <BeforeAfterCards />
