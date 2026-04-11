@@ -132,13 +132,13 @@ export default function HomePage() {
           <section className="flex flex-col items-center gap-6 text-center">
             <div className="bg-background text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              No GPU required · Runs locally in 30 s
+              AI-powered · No GPU required · Runs locally
             </div>
 
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              Stop paying for{" "}
-              <span className="text-muted-foreground">expensive renders.</span>{" "}
-              Get them in 30 seconds — free.
+              High-quality architecture renders{" "}
+              <span className="text-muted-foreground">in 30 seconds.</span> No
+              GPU required.
             </h1>
 
             <p className="text-muted-foreground max-w-xl text-base leading-7">
@@ -163,6 +163,28 @@ export default function HomePage() {
               >
                 <Link href="#how-it-works">How it works</Link>
               </Button>
+            </div>
+
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+              <svg
+                viewBox="0 0 24 24"
+                className="h-3.5 w-3.5 fill-current"
+                aria-hidden
+              >
+                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.549H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" />
+              </svg>
+              Windows
+              <span className="text-muted-foreground/40">&amp;</span>
+              <svg
+                viewBox="0 0 24 24"
+                className="h-3.5 w-3.5 fill-current"
+                aria-hidden
+              >
+                <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
+              </svg>
+              macOS
+              <span className="text-muted-foreground/40 mx-1">·</span>
+              Available now
             </div>
 
             <div className="text-muted-foreground flex flex-wrap justify-center gap-x-8 gap-y-2 pt-2 text-sm">
