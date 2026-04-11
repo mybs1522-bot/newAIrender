@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Lock } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -319,80 +319,90 @@ export function CinematicFooter({
             </div>
           </div>
 
-          {/* Main content — Hero */}
-          <div className="relative z-10 mx-auto mt-20 flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
-            {/* Badge */}
-            <div
+          {/* Main content */}
+          <div className="relative z-10 mx-auto mt-20 flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6">
+            <h2
               ref={headingRef}
-              className="footer-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs"
+              className="footer-text-glow mb-4 text-center text-5xl font-black tracking-tighter md:text-8xl"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-muted-foreground font-medium">
-                AI-powered · No GPU required · Runs locally
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="footer-text-glow text-5xl font-black tracking-tight md:text-7xl lg:text-8xl">
-              High-quality architecture renders in 30 seconds.{" "}
-              <span className="text-muted-foreground">No GPU required.</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-muted-foreground max-w-2xl text-base leading-7 md:text-lg">
-              No costly GPU. No bloated rendering software. Avada runs entirely
-              on your laptop and transforms any room photo into a photorealistic
-              AI render — indistinguishable from the real thing.
+              Download the App
+            </h2>
+            <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
+              Native desktop experience · offline setup · cloud AI generation
             </p>
 
-            {/* CTA buttons */}
             <div
               ref={linksRef}
-              className="flex flex-col items-center gap-4 sm:flex-row"
+              className="flex w-full flex-col items-center gap-6"
             >
-              <MagneticButton
-                as="a"
-                href="/render"
-                className="bg-foreground text-background inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold shadow-lg transition hover:opacity-90"
-              >
-                <Sparkles className="h-4 w-4" />
-                Open Web Studio
-                <ArrowRight className="h-4 w-4" />
-              </MagneticButton>
-              <MagneticButton
-                as="a"
-                href="#how-it-works"
-                className="footer-glass-pill inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
-              >
-                How it works
-              </MagneticButton>
-            </div>
+              {/* Primary download buttons */}
+              <div className="flex w-full flex-wrap justify-center gap-4">
+                <MagneticButton
+                  as="a"
+                  href={windowsHref}
+                  className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                >
+                  <WindowsIcon />
+                  <div className="text-left">
+                    <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
+                      Download for
+                    </p>
+                    <p className="font-bold">Windows</p>
+                    <p className="text-muted-foreground text-xs font-normal">
+                      Windows 10 / 11 · 64-bit
+                    </p>
+                  </div>
+                </MagneticButton>
 
-            {/* OS availability */}
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
-              <WindowsIcon />
-              <span>Windows</span>
-              <span className="text-muted-foreground/40">&amp;</span>
-              <AppleIcon />
-              <span>macOS</span>
-              <span className="text-muted-foreground/40 mx-1">·</span>
-              <span>Available now</span>
-            </div>
+                <MagneticButton
+                  as="a"
+                  href={macHref}
+                  className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                >
+                  <AppleIcon />
+                  <div className="text-left">
+                    <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
+                      Download for
+                    </p>
+                    <p className="font-bold">macOS</p>
+                    <p className="text-muted-foreground text-xs font-normal">
+                      macOS 13+ · Apple Silicon & Intel
+                    </p>
+                  </div>
+                </MagneticButton>
+              </div>
 
-            {/* Trust row */}
-            <div className="text-muted-foreground flex flex-wrap justify-center gap-x-6 gap-y-2 pt-1 text-sm">
-              <span>🖥️ Runs locally</span>
-              <span>·</span>
-              <span>⚡ Renders in &lt; 30 s</span>
-              <span>·</span>
-              <span>20+ design styles</span>
+              {/* Secondary links */}
+              <div className="mt-2 flex flex-wrap justify-center gap-3 md:gap-4">
+                {[
+                  { label: "Privacy Policy", href: "#" },
+                  { label: "Terms of Service", href: "#" },
+                  { label: "Help & Support", href: "/help" },
+                ].map((l) => (
+                  <MagneticButton
+                    key={l.label}
+                    as="a"
+                    href={l.href}
+                    className="footer-glass-pill text-muted-foreground hover:text-foreground rounded-full px-5 py-2.5 text-xs font-medium md:text-sm"
+                  >
+                    {l.label}
+                  </MagneticButton>
+                ))}
+              </div>
+
+              <p className="text-muted-foreground mt-1 flex items-center gap-1.5 text-xs">
+                <Lock className="h-3 w-3" />
+                Free to download · Premium subscription required for AI
+                generation
+              </p>
             </div>
           </div>
 
           {/* Bottom bar */}
           <div className="relative z-20 flex w-full flex-col items-center justify-between gap-4 px-6 pb-8 md:flex-row md:px-12">
             <div className="text-muted-foreground order-2 text-[10px] font-semibold tracking-widest uppercase md:order-1 md:text-xs">
-              © {new Date().getFullYear()} Interior Designer AI. All rights
+              {new Date().getFullYear()} Interior Designer AI. All rights ©{" "}
+              {new Date().getFullYear()} Interior Designer AI. All rights
               reserved.
             </div>
 
