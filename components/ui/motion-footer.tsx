@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { LiveDemoSection } from "@/components/live-demo-section";
+import { BeforeAfterCards } from "@/components/ui/3d-card";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -320,71 +321,79 @@ export function CinematicFooter({
           </div>
 
           {/* Main content */}
-          <div className="relative z-10 mx-auto mt-36 flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6">
-            {/* Badge pill */}
-            <div className="footer-glass-pill mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-muted-foreground font-medium">
-                AI-powered · No GPU required · Runs locally
-              </span>
-            </div>
+          <div className="relative z-10 mx-auto mt-36 w-full max-w-5xl flex-1 px-6 pb-16">
+            {/* Two-column hero row */}
+            <div className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-12">
+              {/* Left: text + buttons */}
+              <div className="flex flex-1 flex-col items-center md:items-start">
+                <div className="footer-glass-pill mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                  <span className="text-muted-foreground font-medium">
+                    AI-powered · No GPU required · Runs locally
+                  </span>
+                </div>
 
-            <h2
-              ref={headingRef}
-              className="footer-text-glow mb-4 text-center text-3xl font-black tracking-tight md:text-5xl"
-            >
-              High-quality architecture renders in 30 seconds. <br />
-              No GPU required.
-            </h2>
-            <p className="text-muted-foreground mb-12 text-center text-sm md:text-base">
-              Native desktop experience · offline setup · cloud AI generation
-            </p>
-
-            {/* Live demo */}
-            <div className="mb-10 w-full max-w-3xl">
-              <LiveDemoSection />
-            </div>
-
-            <div
-              ref={linksRef}
-              className="flex w-full flex-col items-center gap-6"
-            >
-              {/* Primary download buttons */}
-              <div className="flex w-full flex-wrap justify-center gap-4">
-                <MagneticButton
-                  as="a"
-                  href={windowsHref}
-                  className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                <h2
+                  ref={headingRef}
+                  className="footer-text-glow mb-4 text-center text-3xl font-black tracking-tight md:text-left md:text-5xl"
                 >
-                  <WindowsIcon />
-                  <div className="text-left">
-                    <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
-                      Download for
-                    </p>
-                    <p className="font-bold">Windows</p>
-                    <p className="text-muted-foreground text-xs font-normal">
-                      Windows 10 / 11 · 64-bit
-                    </p>
-                  </div>
-                </MagneticButton>
+                  High-quality architecture renders in 30 seconds. <br />
+                  No GPU required.
+                </h2>
+                <p className="text-muted-foreground mb-8 text-center text-sm md:text-left md:text-base">
+                  Native desktop experience · offline setup · cloud AI
+                  generation
+                </p>
 
-                <MagneticButton
-                  as="a"
-                  href={macHref}
-                  className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                <div
+                  ref={linksRef}
+                  className="flex flex-wrap justify-center gap-4 md:justify-start"
                 >
-                  <AppleIcon />
-                  <div className="text-left">
-                    <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
-                      Download for
-                    </p>
-                    <p className="font-bold">macOS</p>
-                    <p className="text-muted-foreground text-xs font-normal">
-                      macOS 13+ · Apple Silicon & Intel
-                    </p>
-                  </div>
-                </MagneticButton>
+                  <MagneticButton
+                    as="a"
+                    href={windowsHref}
+                    className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                  >
+                    <WindowsIcon />
+                    <div className="text-left">
+                      <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
+                        Download for
+                      </p>
+                      <p className="font-bold">Windows</p>
+                      <p className="text-muted-foreground text-xs font-normal">
+                        Windows 10 / 11 · 64-bit
+                      </p>
+                    </div>
+                  </MagneticButton>
+
+                  <MagneticButton
+                    as="a"
+                    href={macHref}
+                    className="footer-glass-pill text-foreground group flex items-center gap-4 rounded-2xl px-8 py-5 text-sm font-bold md:text-base"
+                  >
+                    <AppleIcon />
+                    <div className="text-left">
+                      <p className="text-muted-foreground group-hover:text-foreground/70 text-xs font-normal transition-colors">
+                        Download for
+                      </p>
+                      <p className="font-bold">macOS</p>
+                      <p className="text-muted-foreground text-xs font-normal">
+                        macOS 13+ · Apple Silicon & Intel
+                      </p>
+                    </div>
+                  </MagneticButton>
+                </div>
               </div>
+
+              {/* Right: before/after switching cards */}
+              <div className="flex flex-1 items-center justify-center">
+                <BeforeAfterCards />
+              </div>
+            </div>
+
+            {/* Live demo — full width below */}
+            <div className="mt-14 w-full">
+              <LiveDemoSection />
             </div>
           </div>
         </footer>
