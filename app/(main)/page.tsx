@@ -10,10 +10,6 @@ import {
   Layers,
   Camera,
   Download,
-  Twitter,
-  Linkedin,
-  Github,
-  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,12 +17,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { GoogleAuth } from "@/components/google-auth";
 import { CinematicFooter } from "@/components/ui/motion-footer";
 import { LiveDemoSection } from "@/components/live-demo-section";
-import { StatsDashboard } from "@/components/stats-dashboard";
-import { TrustedBySection } from "@/components/trusted-by-section";
-import { BeforeAfterCards } from "@/components/ui/3d-card";
-import { TestimonialsSection } from "@/components/testimonials-section";
-import { Footer } from "@/components/ui/modem-animated-footer";
-import { FundingAnnouncement } from "@/components/ui/funding-announcement";
+import { MarketingDashboard } from "@/components/ui/dashboard-1";
+import { EbookSection } from "@/components/ebook-section";
 
 const features = [
   {
@@ -91,10 +83,10 @@ const steps = [
 export default function HomePage() {
   return (
     <>
-      <div className="min-h-svh w-full bg-gray-50 dark:bg-transparent">
+      <div className="min-h-svh bg-gray-50 dark:bg-transparent">
         {/* ── Navbar ─────────────────────────────────────────── */}
         <nav className="dark:bg-background/80 sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-12 xl:px-16">
+          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-3 lg:px-8">
             <Link href="/" className="flex items-center gap-2.5">
               <div className="bg-background flex h-7 w-7 items-center justify-center rounded-lg border">
                 <Palette className="h-3.5 w-3.5" />
@@ -136,51 +128,206 @@ export default function HomePage() {
           </div>
         </nav>
 
-        {/* ── Download the App (top) ───────────────────────── */}
-        <CinematicFooter windowsHref="#" macHref="#" />
+        <div className="mx-auto w-full max-w-5xl space-y-16 px-6 py-16 pb-24 lg:px-8">
+          {/* ── Hero ───────────────────────────────────────────── */}
+          <section className="flex flex-col items-center gap-6 text-center">
+            <div className="bg-background text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              Powered by Google Nano Banana Pro
+            </div>
 
-        <div className="mx-auto w-full max-w-7xl space-y-20 px-6 py-16 pb-24 lg:space-y-28 lg:px-12 lg:py-24 xl:px-16">
-          {/* ── Funding announcement ───────────────────────── */}
-          <FundingAnnouncement />
+            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+              Redesign any room with{" "}
+              <span className="text-muted-foreground">
+                artificial intelligence
+              </span>
+            </h1>
 
-          {/* ── Before / After cards ─────────────────────────── */}
-          <div className="flex justify-center py-4">
-            <BeforeAfterCards />
+            <p className="text-muted-foreground max-w-lg text-base leading-7">
+              Upload a photo, configure your design style, and receive a
+              photorealistic render — indistinguishable from a real photograph.
+            </p>
+
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
+              <Button asChild size="lg" className="gap-2 px-6">
+                <Link href="/render">
+                  <Sparkles className="h-4 w-4" />
+                  Open Web Studio
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="gap-2 px-6"
+              >
+                <Link href="#how-it-works">How it works</Link>
+              </Button>
+            </div>
+
+            <div className="text-muted-foreground flex flex-wrap justify-center gap-x-8 gap-y-2 pt-2 text-sm">
+              <span>20+ design styles</span>
+              <span>·</span>
+              <span>Results in &lt; 30 seconds</span>
+              <span>·</span>
+              <span>100% layout preserved</span>
+            </div>
+          </section>
+
+          {/* ── Stats dashboard ───────────────────────────────── */}
+          <div className="flex justify-center">
+            <MarketingDashboard
+              title="Platform at a Glance"
+              teamActivities={{
+                totalHours: 24.8,
+                stats: [
+                  { label: "Bedroom", value: 38, color: "bg-green-400" },
+                  { label: "Living", value: 28, color: "bg-lime-300" },
+                  { label: "Kitchen", value: 20, color: "bg-yellow-300" },
+                  {
+                    label: "Office",
+                    value: 14,
+                    color: "bg-slate-400 dark:bg-slate-600",
+                  },
+                ],
+              }}
+              team={{
+                memberCount: 3200,
+                members: [
+                  {
+                    id: "1",
+                    name: "Aria Shah",
+                    avatarUrl: "https://i.pravatar.cc/150?u=ariashah",
+                  },
+                  {
+                    id: "2",
+                    name: "Leo Park",
+                    avatarUrl: "https://i.pravatar.cc/150?u=leopark",
+                  },
+                  {
+                    id: "3",
+                    name: "Maya Torres",
+                    avatarUrl: "https://i.pravatar.cc/150?u=mayatorres",
+                  },
+                  {
+                    id: "4",
+                    name: "James Okafor",
+                    avatarUrl: "https://i.pravatar.cc/150?u=jamesokafor",
+                  },
+                ],
+              }}
+              cta={{
+                text: "Join thousands of designers using AI to redesign spaces",
+                buttonText: "Get Started",
+                onButtonClick: () => {
+                  window.location.href = "/render";
+                },
+              }}
+            />
           </div>
 
-          {/* ── How it works ─────────────────────────────────── */}
+          {/* ── Live demo ─────────────────────────────────────── */}
+          <LiveDemoSection />
+
+          {/* ── Features bento ─────────────────────────────────── */}
+          <section id="features">
+            <div className="mb-8 text-center">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                Everything you need
+              </h2>
+              <p className="text-muted-foreground mt-2 text-sm">
+                Powerful features wrapped in a simple interface.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-6 gap-3">
+              {/* Large card — first feature */}
+              <Card className="col-span-full lg:col-span-2">
+                <CardContent className="flex h-full flex-col justify-between p-6">
+                  <div className="relative flex h-20 w-20 items-center justify-center rounded-full border">
+                    <Wand2
+                      className="text-muted-foreground h-8 w-8"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  <div className="mt-6 space-y-1">
+                    <h3 className="font-medium">AI-Powered Redesign</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Upload any room photo and our model reimagines the space
+                      with a completely new style — in seconds.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Mid cards */}
+              {features.slice(1, 3).map((f) => (
+                <Card
+                  key={f.title}
+                  className="col-span-full sm:col-span-3 lg:col-span-2"
+                >
+                  <CardContent className="flex h-full flex-col justify-between p-6">
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
+                      <f.icon className="h-5 w-5" strokeWidth={1.5} />
+                    </div>
+                    <div className="mt-6 space-y-1">
+                      <h3 className="font-medium">{f.title}</h3>
+                      <p className="text-muted-foreground text-sm">
+                        {f.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {/* Bottom row */}
+              {features.slice(3).map((f) => (
+                <Card key={f.title} className="col-span-full sm:col-span-2">
+                  <CardContent className="flex h-full flex-col justify-between p-6">
+                    <div className="relative flex h-10 w-10 items-center justify-center rounded-full border dark:border-white/10">
+                      <f.icon className="h-4 w-4" strokeWidth={1.5} />
+                    </div>
+                    <div className="mt-6 space-y-1">
+                      <h3 className="text-sm font-medium">{f.title}</h3>
+                      <p className="text-muted-foreground text-xs">
+                        {f.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* ── How it works ────────────────────────────────────── */}
           <section
             id="how-it-works"
-            className="bg-background rounded-2xl border px-6 py-12 sm:px-12 lg:px-20 lg:py-20"
+            className="bg-background rounded-xl border px-6 py-12 sm:px-12"
           >
-            <div className="mb-10 text-center lg:mb-16">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl xl:text-5xl">
+            <div className="mb-10 text-center">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 How it works
               </h2>
-              <p className="text-muted-foreground mt-2 text-sm lg:mt-4 lg:text-base">
+              <p className="text-muted-foreground mt-2 text-sm">
                 Three steps from photo to polished design.
               </p>
             </div>
-            <div className="grid gap-8 sm:grid-cols-3 lg:gap-14">
+            <div className="grid gap-8 sm:grid-cols-3">
               {steps.map((s) => (
                 <div
                   key={s.number}
-                  className="flex flex-col items-center gap-4 text-center lg:gap-6"
+                  className="flex flex-col items-center gap-4 text-center"
                 >
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border lg:h-20 lg:w-20 dark:border-white/10 dark:before:border-white/5">
-                    <s.icon
-                      className="h-5 w-5 lg:h-8 lg:w-8"
-                      strokeWidth={1.5}
-                    />
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
+                    <s.icon className="h-5 w-5" strokeWidth={1.5} />
                   </div>
                   <div>
                     <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
                       {s.number}
                     </p>
-                    <p className="mt-1 font-medium lg:mt-2 lg:text-xl">
-                      {s.title}
-                    </p>
-                    <p className="text-muted-foreground mt-1.5 text-sm leading-6 lg:mt-3 lg:text-base lg:leading-7">
+                    <p className="mt-1 font-medium">{s.title}</p>
+                    <p className="text-muted-foreground mt-1.5 text-sm leading-6">
                       {s.body}
                     </p>
                   </div>
@@ -188,55 +335,12 @@ export default function HomePage() {
               ))}
             </div>
           </section>
-
-          {/* ── Stats dashboard ───────────────────────────────── */}
-          <StatsDashboard />
-
-          {/* ── Trusted by ────────────────────────────────── */}
-          <TrustedBySection />
-
-          {/* ── Testimonials ──────────────────────────────── */}
-          <TestimonialsSection />
+          {/* ── eBook section ─────────────────────────────── */}
+          <EbookSection />
         </div>
       </div>
 
-      {/* ── Site footer ─────────────────────────────────────── */}
-      <Footer
-        brandName="Interior Designer AI"
-        brandDescription="Transform any room photo into a photorealistic AI render in 30 seconds. No GPU required — runs entirely on your device."
-        socialLinks={[
-          {
-            icon: <Twitter className="h-6 w-6" />,
-            href: "https://twitter.com",
-            label: "Twitter",
-          },
-          {
-            icon: <Linkedin className="h-6 w-6" />,
-            href: "https://linkedin.com",
-            label: "LinkedIn",
-          },
-          {
-            icon: <Github className="h-6 w-6" />,
-            href: "https://github.com",
-            label: "GitHub",
-          },
-          {
-            icon: <Mail className="h-6 w-6" />,
-            href: "mailto:hello@interiordesigner.ai",
-            label: "Email",
-          },
-        ]}
-        navLinks={[
-          { label: "Render Studio", href: "/render" },
-          { label: "Help & Support", href: "/help" },
-          { label: "Settings", href: "/settings" },
-          { label: "Privacy Policy", href: "#" },
-          { label: "Terms of Service", href: "#" },
-        ]}
-        brandIcon={
-          <Palette className="text-background h-8 w-8 drop-shadow-lg sm:h-10 sm:w-10 md:h-14 md:w-14" />
-        }
-      />
+      <CinematicFooter windowsHref="#" macHref="#" />
     </>
   );
 }
