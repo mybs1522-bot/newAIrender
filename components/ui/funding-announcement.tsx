@@ -44,7 +44,7 @@ export function FundingAnnouncement() {
   const { d, h, m, s } = useCountdown(DEADLINE);
 
   return (
-    <section className="w-full px-0 py-8">
+    <section className="w-full py-8">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* ── Left: Announcement ───────────────────────────── */}
         <motion.div
