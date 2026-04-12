@@ -26,6 +26,7 @@ import { TrustedBySection } from "@/components/trusted-by-section";
 import { BeforeAfterCards } from "@/components/ui/3d-card";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { Footer } from "@/components/ui/modem-animated-footer";
+import { FundingAnnouncement } from "@/components/ui/funding-announcement";
 
 const features = [
   {
@@ -139,6 +140,9 @@ export default function HomePage() {
         <CinematicFooter windowsHref="#" macHref="#" />
 
         <div className="w-full space-y-20 px-6 py-16 pb-24 lg:space-y-28 lg:px-16 lg:py-24 xl:px-24">
+          {/* ── Funding announcement ───────────────────────── */}
+          <FundingAnnouncement />
+
           {/* ── Before / After cards ─────────────────────────── */}
           <div className="flex justify-center py-4">
             <BeforeAfterCards />
