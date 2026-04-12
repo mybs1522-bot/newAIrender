@@ -164,9 +164,16 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     min-height: 100svh;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }
 
