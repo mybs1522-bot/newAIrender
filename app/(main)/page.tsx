@@ -91,10 +91,10 @@ const steps = [
 export default function HomePage() {
   return (
     <>
-      <div className="min-h-svh bg-gray-50 dark:bg-transparent">
+      <div className="min-h-svh w-full bg-gray-50 dark:bg-transparent">
         {/* ── Navbar ─────────────────────────────────────────── */}
         <nav className="dark:bg-background/80 sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-3 lg:px-8">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-12 xl:px-16">
             <Link href="/" className="flex items-center gap-2.5">
               <div className="bg-background flex h-7 w-7 items-center justify-center rounded-lg border">
                 <Palette className="h-3.5 w-3.5" />
