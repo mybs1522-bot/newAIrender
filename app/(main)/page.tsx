@@ -139,7 +139,7 @@ export default function HomePage() {
         {/* ── Download the App (top) ───────────────────────── */}
         <CinematicFooter windowsHref="#" macHref="#" />
 
-        <div className="w-full space-y-20 px-6 py-16 pb-24 lg:space-y-28 lg:px-16 lg:py-24 xl:px-24">
+        <div className="mx-auto w-full max-w-7xl space-y-20 px-6 py-16 pb-24 lg:space-y-28 lg:px-12 lg:py-24 xl:px-16">
           {/* ── Funding announcement ───────────────────────── */}
           <FundingAnnouncement />
 
