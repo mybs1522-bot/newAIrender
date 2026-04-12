@@ -71,9 +71,17 @@ export function FundingAnnouncement() {
               <span className="text-foreground font-semibold">
                 15 days only
               </span>
-              , we&apos;re slashing our monthly price by{" "}
-              <span className="text-primary font-semibold">50%</span>. Lock in
-              now and that price is{" "}
+              , we&apos;re cutting prices — monthly from{" "}
+              <span className="text-muted-foreground font-semibold line-through">
+                $40
+              </span>{" "}
+              to <span className="text-primary font-semibold">$20</span>, and
+              yearly from{" "}
+              <span className="text-muted-foreground font-semibold line-through">
+                $30
+              </span>{" "}
+              to <span className="text-primary font-semibold">$15</span>/mo.
+              Lock in now and this price is{" "}
               <span className="text-foreground font-semibold">
                 yours forever
               </span>{" "}
@@ -82,21 +90,38 @@ export function FundingAnnouncement() {
           </div>
 
           {/* Price display */}
-          <div className="flex items-end gap-4">
+          <div className="flex flex-wrap gap-6">
             <div className="flex flex-col">
-              <span className="text-muted-foreground text-sm line-through">
-                $20/mo
+              <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+                Monthly
               </span>
-              <span className="text-primary text-5xl leading-none font-black">
-                $10
-              </span>
+              <div className="flex items-end gap-2">
+                <span className="text-muted-foreground text-sm line-through">
+                  $40
+                </span>
+                <span className="text-primary text-4xl leading-none font-black">
+                  $20
+                </span>
+              </div>
               <span className="text-muted-foreground mt-1 text-sm">
                 per month · forever
               </span>
             </div>
-            <div className="bg-primary/10 border-primary/20 mb-1 rounded-xl border px-3 py-1.5">
-              <span className="text-primary text-sm font-bold">
-                50% OFF · Locked in
+            <div className="bg-border w-px self-stretch" />
+            <div className="flex flex-col">
+              <span className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+                Yearly
+              </span>
+              <div className="flex items-end gap-2">
+                <span className="text-muted-foreground text-sm line-through">
+                  $30
+                </span>
+                <span className="text-primary text-4xl leading-none font-black">
+                  $15
+                </span>
+              </div>
+              <span className="text-muted-foreground mt-1 text-sm">
+                per month · billed yearly
               </span>
             </div>
           </div>
@@ -133,9 +158,7 @@ export function FundingAnnouncement() {
           <Button size="lg" className="w-fit px-8 text-base font-bold">
             Claim 50% Off — Lock it in Forever ↗
           </Button>
-          <p className="text-muted-foreground -mt-3 text-xs">
-            No credit card required during trial · Cancel anytime
-          </p>
+          <p className="text-muted-foreground -mt-3 text-xs">Cancel anytime</p>
         </motion.div>
 
         {/* ── Right: Chart ─────────────────────────────────── */}

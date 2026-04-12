@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 const MONTHLY_PRICE = 20;
 const MONTHLY_ORIGINAL = 40;
-const YEARLY_PRICE = 15; // per month, billed as $180/year
-const YEARLY_ORIGINAL = 30; // per month original
+const YEARLY_PRICE = 15;
+const YEARLY_ORIGINAL = 30;
 
 const FEATURES = [
   { label: "Unlimited Renders", highlight: true },
@@ -147,7 +147,7 @@ export function PricingCard({ onStartTrial }: PricingCardProps) {
           Activate Trial & Download
         </Button>
         <p className="text-muted-foreground text-center text-xs">
-          No credit card required · Cancel anytime
+          Cancel anytime
         </p>
       </div>
     </div>
