@@ -13,7 +13,6 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-
 export const metadata: Metadata = {
   title: "Interior Designer AI",
   description:
@@ -67,7 +66,9 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen antialiased`}>
+      <body
+        className={`${inter.className} min-h-screen overflow-x-hidden antialiased`}
+      >
         <SessionProvider>
           <ThemeProvider
             attribute="class"
