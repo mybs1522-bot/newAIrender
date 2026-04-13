@@ -3,7 +3,11 @@ import Replicate from "replicate";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
-import { incrementGenerationCount } from "@/lib/usage";
+import {
+  incrementGenerationCount,
+  getGenerationCount,
+  TRIAL_GENERATION_LIMIT,
+} from "@/lib/usage";
 import type { DesignQuestionnaire } from "@/types";
 
 /* ─── Prompt maps ──────────────────────────────────────────────────────── */
@@ -289,30 +293,40 @@ export async function POST(request: Request) {
       );
     }
 
-    if (process.env.STRIPE_SECRET_KEY) {
-      const email = session.user.email;
-      const customers = await stripe.customers.list({ email, limit: 1 });
-      let subscriptionStatus: string | null = null;
+    // Check free trial usage
+    const currentCount = await getGenerationCount(session.user.email);
+    const hasTrialRemaining = currentCount < TRIAL_GENERATION_LIMIT;
 
-      if (customers.data.length > 0) {
-        const subs = await stripe.subscriptions.list({
-          customer: customers.data[0].id,
-          status: "all",
-          limit: 5,
-        });
-        const active = subs.data.find(
-          (s) =>
-            (s.status === "active" || s.status === "trialing") &&
-            !s.cancel_at_period_end
-        );
-        subscriptionStatus = active?.status ?? null;
-      }
+    // If user still has free trial renders, skip the Stripe check entirely
+    if (!hasTrialRemaining) {
+      if (process.env.STRIPE_SECRET_KEY) {
+        const email = session.user.email;
+        const customers = await stripe.customers.list({ email, limit: 1 });
+        let subscriptionStatus: string | null = null;
 
-      if (!subscriptionStatus) {
-        return NextResponse.json(
-          { error: "Subscription required", code: "subscription_required" },
-          { status: 403 }
-        );
+        if (customers.data.length > 0) {
+          const subs = await stripe.subscriptions.list({
+            customer: customers.data[0].id,
+            status: "all",
+            limit: 5,
+          });
+          const active = subs.data.find(
+            (s) =>
+              (s.status === "active" || s.status === "trialing") &&
+              !s.cancel_at_period_end
+          );
+          subscriptionStatus = active?.status ?? null;
+        }
+
+        if (!subscriptionStatus) {
+          return NextResponse.json(
+            {
+              error: "Free trial exhausted. Subscription required.",
+              code: "trial_exhausted",
+            },
+            { status: 403 }
+          );
+        }
       }
     }
     // ── End gate ────────────────────────────────────────────────────────────

@@ -63,6 +63,8 @@ function RenderPageInner() {
     loading: subLoading,
     hadTrial,
     refresh: refreshSubscription,
+    generationCount,
+    generationLimit,
   } = useSubscription();
 
   const handleImageUpload = useCallback((base64: string) => {
@@ -84,7 +86,8 @@ function RenderPageInner() {
 
   const handleGenerate = useCallback(async () => {
     if (!uploadedImage) return;
-    if (!subLoading && !subscribed) {
+    const hasTrialRemaining = generationCount < generationLimit;
+    if (!subLoading && !subscribed && !hasTrialRemaining) {
       setPricingOpen(true);
       return;
     }
@@ -137,6 +140,8 @@ function RenderPageInner() {
     subLoading,
     subscribed,
     refreshSubscription,
+    generationCount,
+    generationLimit,
   ]);
 
   return (

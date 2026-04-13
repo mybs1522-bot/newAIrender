@@ -44,10 +44,15 @@ export function AppSidebar() {
     generationCount,
     generationLimit,
     cancelAtPeriodEnd,
+    subscribed,
   } = useSubscription();
   const isLoggedIn = status === "authenticated" && !!session?.user;
-  const isTrialing = subStatus === "trialing";
-  const trialExhausted = isTrialing && generationCount >= generationLimit;
+  const isStripeTrial = subStatus === "trialing";
+  const isFreeUsage = !subscribed && generationCount < generationLimit;
+  const showTrialProgress = isStripeTrial || isFreeUsage;
+  const trialExhausted =
+    (isStripeTrial && generationCount >= generationLimit) ||
+    (!subscribed && generationCount >= generationLimit);
 
   return (
     <Sidebar collapsible="icon">
@@ -113,7 +118,7 @@ export function AppSidebar() {
             </div>
           </div>
         )}
-        {isTrialing && !cancelAtPeriodEnd && (
+        {showTrialProgress && !cancelAtPeriodEnd && (
           <div className="px-2 pb-1">
             {trialExhausted ? (
               <div className="flex items-center justify-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-400">
@@ -170,7 +175,7 @@ export function AppSidebar() {
                       <span className="truncate text-sm font-medium">
                         {session.user.name}
                       </span>
-                      {isTrialing ? (
+                      {showTrialProgress || trialExhausted ? (
                         <span
                           className={`truncate text-xs font-medium ${trialExhausted ? "text-destructive" : "text-amber-500 dark:text-amber-400"}`}
                         >
