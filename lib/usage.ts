@@ -9,13 +9,17 @@ const DATA_FILE = path.join(DATA_DIR, "usage.json");
 
 type UsageStore = Record<string, number>;
 
-async function readStore(): Promise<UsageStore> {
+export async function getAllUsage(): Promise<UsageStore> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf-8");
     return JSON.parse(raw) as UsageStore;
   } catch {
     return {};
   }
+}
+
+async function readStore(): Promise<UsageStore> {
+  return getAllUsage();
 }
 
 async function writeStore(store: UsageStore): Promise<void> {
