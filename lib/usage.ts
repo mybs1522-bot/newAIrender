@@ -1,9 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
+import os from "os";
 
 export const TRIAL_GENERATION_LIMIT = 3;
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "usage.json");
 
 type UsageStore = Record<string, number>;
