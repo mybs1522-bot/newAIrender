@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 interface ActivityStat {
   label: string;
@@ -34,7 +35,8 @@ interface MarketingDashboardProps {
   cta: {
     text: string;
     buttonText: string;
-    onButtonClick: () => void;
+    onButtonClick?: () => void;
+    buttonHref?: string;
   };
   onFilterClick?: () => void;
   className?: string;
@@ -237,10 +239,19 @@ export const MarketingDashboard = React.forwardRef<
                 {cta.text}
               </p>
             </div>
-            <Button onClick={cta.onButtonClick} className="shrink-0">
-              {cta.buttonText}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            {cta.buttonHref ? (
+              <Button asChild className="shrink-0">
+                <Link href={cta.buttonHref}>
+                  {cta.buttonText}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            ) : (
+              <Button onClick={cta.onButtonClick} className="shrink-0">
+                {cta.buttonText}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            )}
           </div>
         </motion.div>
       </motion.div>

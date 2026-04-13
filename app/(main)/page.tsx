@@ -220,9 +220,7 @@ export default function HomePage() {
               cta={{
                 text: "Join thousands of designers using AI to redesign spaces",
                 buttonText: "Get Started",
-                onButtonClick: () => {
-                  window.location.href = "/render";
-                },
+                buttonHref: "/render",
               }}
             />
           </div>
