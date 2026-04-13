@@ -3,7 +3,6 @@ import { Resend } from "resend";
 import { createOTP } from "@/lib/otp";
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   const { email } = await req.json();
   if (!email || typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
@@ -16,6 +15,16 @@ export async function POST(req: NextRequest) {
     console.log(`\n🔑 OTP for ${email}: ${code}\n`);
     return NextResponse.json({ ok: true, token });
   }
+
+  if (!process.env.RESEND_API_KEY) {
+    console.error("RESEND_API_KEY is not set.");
+    return NextResponse.json(
+      { error: "Email service is not configured. Please contact support." },
+      { status: 500 }
+    );
+  }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const { error } = await resend.emails.send({
     from: "Interior Designer AI <design@avada.space>",
