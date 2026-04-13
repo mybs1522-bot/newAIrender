@@ -1,8 +1,10 @@
 import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
+import os from "os";
 
-const DATA_FILE = path.join(process.cwd(), "data", "device-auth.json");
+const DATA_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), "data");
+const DATA_FILE = path.join(DATA_DIR, "device-auth.json");
 
 interface DeviceAuthEntry {
   state: string;
@@ -50,7 +52,12 @@ export async function createDeviceState(): Promise<string> {
 
 export async function createTransferToken(
   state: string,
-  user: { id?: string; email?: string | null; name?: string | null; image?: string | null }
+  user: {
+    id?: string;
+    email?: string | null;
+    name?: string | null;
+    image?: string | null;
+  }
 ): Promise<string | null> {
   const data = await readData();
   const entry = data[state];

@@ -1,20 +1,25 @@
 import fs from "fs/promises";
 import path from "path";
+import os from "os";
 
 export const TRIAL_GENERATION_LIMIT = 3;
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "usage.json");
 
 type UsageStore = Record<string, number>;
 
-async function readStore(): Promise<UsageStore> {
+export async function getAllUsage(): Promise<UsageStore> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf-8");
     return JSON.parse(raw) as UsageStore;
   } catch {
     return {};
   }
+}
+
+async function readStore(): Promise<UsageStore> {
+  return getAllUsage();
 }
 
 async function writeStore(store: UsageStore): Promise<void> {
